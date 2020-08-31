@@ -1,10 +1,11 @@
 import './Sidebar.scss'
 import React from 'react'
+import { DialogItem } from 'components'
 
 const Sidebar = () => {
   let dialogs = [
     {
-      avatar: '',
+      avatar: 'https://source.unsplash.com/random/1',
       isOnline: true,
       name: 'Jack The Ripper',
       lastmessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
@@ -14,7 +15,7 @@ const Sidebar = () => {
       isRead: true,
     },
     {
-      avatar: '',
+      avatar: 'https://source.unsplash.com/random/2',
       isOnline: false,
       name: '222',
       lastmessage: 'Напиши как сможешь',
@@ -24,7 +25,7 @@ const Sidebar = () => {
       isRead: false,
     },
     {
-      avatar: '',
+      avatar: 'https://source.unsplash.com/random/3',
       isOnline: false,
       name: '333',
       lastmessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
@@ -34,7 +35,7 @@ const Sidebar = () => {
       isRead: true,
     },
     {
-      avatar: '',
+      avatar: 'https://source.unsplash.com/random/4',
       isOnline: true,
       name: '444',
       lastmessage: 'Напиши как сможешь',
@@ -56,8 +57,20 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="Sidebar__dialogs">
-        {dialogs.map(() => {
-          
+        {dialogs.map((item, key) => {
+          return (
+            <DialogItem 
+              key={key}
+              avatar={item.avatar}
+              isOnline={item.isOnline}
+              name={item.name}
+              lastmessage={item.lastmessage}
+              time={item.time}
+              isMe={item.isMe}
+              newMessagesCount={item.newMessagesCount}
+              isRead={item.isRead}
+            />
+          )
         })}
       </div>
     </div>

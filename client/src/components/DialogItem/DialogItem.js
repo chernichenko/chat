@@ -1,12 +1,21 @@
 import './DialogItem.scss'
 import React from 'react'
 
-const DialogItem = () => {
+const DialogItem = ({
+  avatar,
+  isOnline,
+  name,
+  lastmessage,
+  time,
+  isMe,
+  newMessagesCount,
+  isRead
+}) => {
   return (
     <div className="DialogItem">
       <div className="DialogItem__column1">
         <div className="DialogItem__avatar">
-          <img src="" alt=""/>
+          <img src={avatar} alt=""/>
           <div className="DialogItem__online"></div>
         </div>
       </div>
