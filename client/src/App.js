@@ -1,17 +1,24 @@
 import React from 'react'
 import 'materialize-css'
-import { useRoutes } from 'hooks'
-import { Navbar } from 'components/Navbar'
-import { useSelector  } from 'react-redux'
+// import { useRoutes } from 'hooks'
+import { Navbar } from 'components'
+// import { useSelector  } from 'react-redux'
+import { Home } from 'pages'
 
 const App = () => {
-  const isAuth = useSelector(state => state.user.isAuth)
+  // const isAuth = useSelector(state => state.user.isAuth)
 
   return (
+    // <div className="App">
+    //   {isAuth && <Navbar />}
+    //   <div className="container">
+    //     {useRoutes(isAuth)}
+    //   </div>
+    // </div>
     <div className="App">
-      {isAuth && <Navbar />}
+      <Navbar />
       <div className="container">
-        {useRoutes(isAuth)}
+        <Home />
       </div>
     </div>
   )
