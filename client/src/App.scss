@@ -1,0 +1,75 @@
+@import "~materialize-css/dist/css/materialize.min.css";
+
+$blue: #1E88E5;
+$orange: #f57f17;
+
+img {
+   width: 100%;
+   height: auto;
+}
+
+input.yellow-input{
+   border-bottom: 1px solid #fff !important;
+   box-shadow: 0 1px 0 0 #fff !important;
+   color: white;
+}
+
+input.yellow-input + label {
+   color: #fff !important;
+}
+
+input.yellow-input:focus {
+   border-bottom: 1px solid #ffeb3b !important;
+   box-shadow: 0 1px 0 0 #ffeb3b !important;
+}
+
+input.yellow-input:focus + label  {
+   color: #ffeb3b !important;
+}
+
+input:-internal-autofill-selected {
+   background: transparent;
+}
+
+.input-field{
+   margin: 1rem 0;
+   padding: 0 !important;
+}
+.input-field.col label{
+   left: 0 !important;
+}
+
+.Loader{
+   height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+nav ul a.active {
+   background-color: rgba(0,0,0,0.1);
+}
+
+.login, .registration {
+   .card a {
+      color: white;
+      text-decoration: underline;
+      display: inline-block;
+      font-size: 16px;
+   }
+   .button-wrap {
+      margin: 20px 0;
+   }
+   .to-registration-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+   }
+} 
+
+.back {
+   font-size: 24px;
+   margin-bottom: 20px;
+   display: block;
+}

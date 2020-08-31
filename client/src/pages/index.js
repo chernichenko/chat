@@ -1,0 +1,5 @@
+export { default as Login } from "./Auth/Login/Login"
+export { default as Registration } from "./Auth/Registration/Registration"
+export { default as ChangePasswordStart } from "./Auth/ChangePasswordStart/ChangePasswordStart"
+export { default as ChangePasswordFinish } from "./Auth/ChangePasswordFinish/ChangePasswordFinish"
+export { default as Home } from "./Home/Home"
