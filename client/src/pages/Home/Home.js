@@ -1,6 +1,6 @@
 import React from 'react'
 import './Home.scss'
-import { Sidebar } from 'components'
+import { Sidebar, Dialog } from 'components' 
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
         <Sidebar />
       </div>
       <div className="Home__column2">
-
+        <Dialog /> 
       </div>
     </div>    
   );

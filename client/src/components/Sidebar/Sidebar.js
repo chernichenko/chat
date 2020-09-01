@@ -8,41 +8,41 @@ const Sidebar = () => {
       avatar: 'https://source.unsplash.com/random/1',
       isOnline: true,
       name: 'Jack The Ripper',
-      lastmessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
+      lastMessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
       time: 'Сейчас',
       isMe: true,
-      newMessagesCount: null,
       isRead: true,
+      newMessagesCount: null,
     },
     {
       avatar: 'https://source.unsplash.com/random/2',
       isOnline: false,
       name: '222',
-      lastmessage: 'Напиши как сможешь',
+      lastMessage: 'Напиши как сможешь',
       time: '13:01',
-      isMe: false,
-      newMessagesCount: null,
+      isMe: true,
       isRead: false,
+      newMessagesCount: null,
     },
     {
-      avatar: 'https://source.unsplash.com/random/3',
+      avatar: null,
       isOnline: false,
-      name: '333',
-      lastmessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
+      name: 'Jack',
+      lastMessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
       time: 'Сейчас',
       isMe: false,
-      newMessagesCount: null,
       isRead: true,
+      newMessagesCount: null,
     },
     {
       avatar: 'https://source.unsplash.com/random/4',
       isOnline: true,
       name: '444',
-      lastmessage: 'Напиши как сможешь',
+      lastMessage: 'Напиши как сможешь',
       time: 'Сейчас',
       isMe: false,
-      newMessagesCount: 2,
       isRead: false,
+      newMessagesCount: 2,
     }
   ]
   return (
@@ -64,11 +64,11 @@ const Sidebar = () => {
               avatar={item.avatar}
               isOnline={item.isOnline}
               name={item.name}
-              lastmessage={item.lastmessage}
+              lastMessage={item.lastMessage}
               time={item.time}
               isMe={item.isMe}
-              newMessagesCount={item.newMessagesCount}
               isRead={item.isRead}
+              newMessagesCount={item.newMessagesCount}
             />
           )
         })}
