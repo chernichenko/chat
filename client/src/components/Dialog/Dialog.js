@@ -36,6 +36,46 @@ const Dialog = () => {
 
       <div className="Dialog__messages">
 
+        <div className="Message me">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/1" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
+        <div className="Message me">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/1" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
+        <div className="Message">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/2" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
+        <div className="Message me">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/1" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
       </div>
 
       <div className="Dialog__input-wrap">
