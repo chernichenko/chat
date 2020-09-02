@@ -45,6 +45,7 @@ const Sidebar = () => {
       newMessagesCount: 2,
     }
   ]
+
   return (
     <div className="Sidebar">
       <div className="Sidebar__top">
@@ -74,7 +75,7 @@ const Sidebar = () => {
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Sidebar

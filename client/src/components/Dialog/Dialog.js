@@ -2,18 +2,17 @@ import './Dialog.scss'
 import 'emoji-mart/css/emoji-mart.css'
 import React, { useState, useEffect } from 'react'
 import { Picker } from 'emoji-mart'
-import TextareaAutosize from 'react-textarea-autosize'
 import smileSvg from 'assets/icons/smile.svg'
+import sendSvg from 'assets/icons/send.svg'
 
 const Dialog = () => {
   const [value, setValue] = useState('')
   const [isEmojiOpen, setIsEmojiOpen] = useState(false)
 
-  console.log(isEmojiOpen)
-
   useEffect(() => {
-    console.log(value)
-  }, [value])
+    let messagesWrap = document.getElementById('messages')
+    messagesWrap.scrollTop = messagesWrap.scrollHeight
+  }, [])
 
   const addEmoji = (e) => {
     let sym = e.unified.split('-')
@@ -22,6 +21,14 @@ const Dialog = () => {
     let emoji = String.fromCodePoint(...codesArray)
     setValue(value + emoji)
     setIsEmojiOpen(false)
+  }
+
+  const sendHandler = () => {
+    console.log('Send', value)
+  }
+
+  const keyHandler = e => {
+    if(e.keyCode === 13) sendHandler()
   }
 
   return (
@@ -34,7 +41,57 @@ const Dialog = () => {
         </div>
       </div>
 
-      <div className="Dialog__messages">
+      <div id="messages" className="Dialog__messages">
+ 
+        <div className="Message me">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/1" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
+        <div className="Message me">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/1" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
+        <div className="Message">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/2" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
+        <div className="Message">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/2" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
+        <div className="Message me">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/1" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
 
         <div className="Message me">
           <div className="Message__avatar">
@@ -66,6 +123,16 @@ const Dialog = () => {
           </div>
         </div>
 
+        <div className="Message">
+          <div className="Message__avatar">
+            <img src="https://source.unsplash.com/random/2" alt="" />
+          </div>
+          <div className="Message__content">
+            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
+            <div className="Message__time">Вчера, в 13:23</div>
+          </div>
+        </div>
+
         <div className="Message me">
           <div className="Message__avatar">
             <img src="https://source.unsplash.com/random/1" alt="" />
@@ -90,13 +157,17 @@ const Dialog = () => {
           <img src={smileSvg} alt="" onClick={() => setIsEmojiOpen(true)} />
         </div>}
         
-        <TextareaAutosize 
-          size="large"
-          placeholder="Введите текст сообщения…"
-          value={value}
-          onChange={e => setValue(e.target.value)}
-          maxRows={3}
-        />
+        <div className="Input">
+          <input
+            placeholder="Введите текст сообщения…"
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            onKeyDown={keyHandler}
+          />
+          <div className="send" onClick={sendHandler}>
+            <img src={sendSvg} alt="" onClick={() => {}} />
+          </div>
+        </div>
       </div>
     </div>
   )
