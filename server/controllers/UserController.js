@@ -8,6 +8,7 @@ const resetEmail = require('../emails/reset')
 const crypto = require('crypto')
 const nodemailer = require('nodemailer')
 const sendgrid = require('nodemailer-sendgrid-transport')
+const { saveFile } = require('../utils/utils')
 
 const transporter = nodemailer.createTransport(sendgrid({
    auth: {api_key: config.get('SENDGRID_API_KEY')}
@@ -17,7 +18,7 @@ const UserController = {
    register: async (req, res) => {
       try {
          const errors = validationResult(req)
-         
+
          if (!errors.isEmpty()) {
             return res.status(400).json({
                errors: errors.array(),
@@ -39,14 +40,20 @@ const UserController = {
    
          const hashedPassword = await bcrypt.hash(password, 12)
 
-         const user = new User({ name, email, password: hashedPassword })
+         let avatarUrl = null
+         if (req.files) {
+            let path = saveFile(req.files.file, 'images') 
+            avatarUrl = path
+         } 
+
+         const user = new User({ name, email, password: hashedPassword, avatarUrl })
          await user.save() 
          await transporter.sendMail(regEmail(email)) 
    
          res.status(201).json({ message: 'Пользователь создан' })
 
       } catch (error) {
-         res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
+         res.status(500).json({ message: '123124' })
       }
    },
    login: async (req, res) => {
@@ -81,7 +88,7 @@ const UserController = {
             { expiresIn: '24h' }
          ) 
    
-         res.json({ token }) 
+         res.json({ name: user.name, avatarUrl: user.avatarUrl, token }) 
    
       } catch (e) {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
@@ -130,7 +137,19 @@ const UserController = {
       } catch (e) {
          console.log(e)
       }
-   }
+   },
+   getUser: async (req, res) => {
+      try {
+         if (req.user) {
+            const user = await User.findOne({ _id: req.user.userId })
+            res.json(user)
+         } else {
+            res.status(401).json({ message: 'Не зарегистрирован' })
+         }
+      } catch (e) {
+         res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
+      }
+   },
 }
 
 module.exports = UserController

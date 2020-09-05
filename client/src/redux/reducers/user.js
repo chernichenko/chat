@@ -1,12 +1,11 @@
-import { LOGIN, LOGOUT } from 'redux/actionTypes'
+import { LOGIN, LOGOUT, SET_USER } from 'redux/actionTypes'
 import { STORAGE_NAME } from 'utils/constants'
 
-const dataLS = JSON.parse(localStorage.getItem(STORAGE_NAME))
-const tokenFromLS = dataLS ? dataLS.token : null
-
 const initialState = {
-   isAuth: !!tokenFromLS,
-   token: tokenFromLS
+   name: null,
+   avatarUrl: null,
+   isAuth: null,
+   token: null
 }
 
 const userReducer = (state = initialState, { type, payload }) => {
@@ -16,17 +15,26 @@ const userReducer = (state = initialState, { type, payload }) => {
             token: payload.token
          }))
          return {
+            name: payload.name,
+            avatarUrl: payload.avatarUrl,
             isAuth: true,
             token: payload.token
-         };
+         }
       case LOGOUT:
          localStorage.removeItem(STORAGE_NAME)
          return {
             isAuth: false,
             token: null
-         };
+         }
+      case SET_USER:
+         return {
+            name: payload.name,
+            avatarUrl: payload.avatarUrl,
+            isAuth: payload.isAuth,
+            token: payload.token
+         }
       default:
-         return state;
+         return state
    }
 }
 

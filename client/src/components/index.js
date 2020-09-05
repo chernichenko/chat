@@ -1,5 +1,6 @@
-export { default as Loader } from "./Loader"
+export { default as Loader } from "./Loader/Loader" 
 export { default as Navbar } from "./Navbar/Navbar"
 export { default as Sidebar } from "./Sidebar/Sidebar"
 export { default as DialogItem } from "./DialogItem/DialogItem"
 export { default as Dialog } from "./Dialog/Dialog"
+export { default as Toast } from "./Toast/Toast"

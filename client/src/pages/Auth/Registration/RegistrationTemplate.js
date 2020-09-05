@@ -45,12 +45,22 @@ const RegistrationTemplate = ({ loading, form, changeHandler, registerHandler })
                />
             </div>
 
+            <div className="Input file">
+               <input 
+                  id="file"
+                  type="file" 
+                  name="file"
+                  onChange={e => changeHandler(e)}
+               />
+               <label htmlFor="file">{(form.file && form.file.name) ? form.file.name : 'Фото' }</label> 
+            </div>
+
          </div>
          <div className="">
             <button
                className="button"
                onClick={registerHandler}
-               disabled={loading}
+               disabled={loading || !(form.name && form.email && form.password)}
             >
                Регистрация
             </button>

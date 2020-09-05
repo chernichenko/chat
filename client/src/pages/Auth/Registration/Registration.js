@@ -6,15 +6,22 @@ import RegistrationTemplate from './RegistrationTemplate'
 const Registration = ({ history }) => {
    const { request, loading } = useHttp()
    const message = useMessage()
-   const [form, setForm] = useState({ name: '', email: '', password: '' })
+   const [form, setForm] = useState({ name: '', email: '', password: '', file: '' })
 
    const changeHandler = event => {
-      setForm({ ...form, [event.target.name]: event.target.value })
+      let newValue
+      event.target.type !== 'file' ? newValue = event.target.value : newValue = event.target.files[0]
+      setForm({ ...form, [event.target.name]: newValue })
    }
 
    const registerHandler = async () => {
-     try {
-         const data = await request('/api/auth/register', 'POST', {...form})
+      let formData = new FormData()
+      for (let key in form) {
+         formData.append(key, form[key])
+      }
+
+      try {
+         const data = await request('/api/auth/register', 'POST', formData)
          history.push(`/`)
          message(data.message)
       } catch (e) {
@@ -22,8 +29,8 @@ const Registration = ({ history }) => {
       }
    }
 
-   return(
-      <RegistrationTemplate 
+   return (
+      <RegistrationTemplate
          loading={loading}
          form={form}
          changeHandler={changeHandler}

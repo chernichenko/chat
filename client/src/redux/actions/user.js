@@ -1,17 +1,21 @@
-import { LOGIN, LOGOUT } from 'redux/actionTypes'
+import { LOGIN, LOGOUT, SET_USER } from 'redux/actionTypes'
 
 const Actions = {
-   login: token => {
+   login: data => {
       return {
          type: LOGIN,
-         payload: {
-            token
-         }
+         payload: data
       }
    },
    logout: () => {
       return {
          type: LOGOUT
+      }
+   },
+   setUser: data => {
+      return{
+         type: SET_USER,
+         payload: data
       }
    }
 }

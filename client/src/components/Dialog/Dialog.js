@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Picker } from 'emoji-mart'
 import smileSvg from 'assets/icons/smile.svg'
 import sendSvg from 'assets/icons/send.svg'
+import Message from 'components/Message/Message'
 
 const Dialog = () => {
   const [value, setValue] = useState('')
@@ -42,107 +43,10 @@ const Dialog = () => {
       </div>
 
       <div id="messages" className="Dialog__messages">
- 
-        <div className="Message me">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/1" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message me">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/1" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/2" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/2" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message me">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/1" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message me">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/1" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message me">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/1" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/2" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/2" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь! Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
-        <div className="Message me">
-          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/1" alt="" />
-          </div>
-          <div className="Message__content">
-            <div className="Message__text">Салам, брат Цезарь!</div>
-            <div className="Message__time">Вчера, в 13:23</div>
-          </div>
-        </div>
-
+        <Message isMe="true" />
+        <Message isMe="true" />
+        <Message />
+        <Message isMe="true" />
       </div>
 
       <div className="Dialog__input-wrap">

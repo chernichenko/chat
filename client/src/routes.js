@@ -1,13 +1,16 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { Login, Registration, ChangePasswordStart, ChangePasswordFinish, Home } from 'pages'
+import { Login, Registration, ChangePasswordStart, ChangePasswordFinish, Home, Profile } from 'pages'
 
-const useRoutes = isAuth => {
+const Routes = isAuth => {
    return (
       isAuth
       ? <Switch>
          <Route path="/" exact>
             <Home />
+         </Route>
+         <Route path="/profile" exact>
+            <Profile />
          </Route>
          <Redirect to="/" />
       </Switch>
@@ -31,4 +34,4 @@ const useRoutes = isAuth => {
    )
 }
  
-export default useRoutes
+export default Routes

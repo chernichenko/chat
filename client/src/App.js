@@ -1,25 +1,50 @@
-import React from 'react'
 import 'materialize-css'
-// import { useRoutes } from 'hooks'
-import { Navbar } from 'components'
-// import { useSelector  } from 'react-redux'
-import { Home } from 'pages'
+import React, { useState, useEffect } from 'react'
+import { useHttp, useMessage } from 'hooks'
+import { Navbar, Toast, Loader } from 'components'
+import { STORAGE_NAME } from 'utils/constants'
+import { useSelector, useDispatch } from 'react-redux'
+import Actions from 'redux/actions/user'
+import Routes from './routes'
+
+const dataLS = JSON.parse(localStorage.getItem(STORAGE_NAME))
+const token = dataLS ? dataLS.token : null
 
 const App = () => {
-  // const isAuth = useSelector(state => state.user.isAuth)
+  const { request } = useHttp()
+  const message = useMessage()
+  const [isLoader, setIsLoader] = useState(true)
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const userFromAPI = await request(`/api/user/`, 'GET', null, { auth: `Che ${token}` })
+        dispatch(Actions.setUser({
+          name: userFromAPI.name,
+          avatarUrl: userFromAPI.avatarUrl,
+          isAuth: true,
+          token: token
+        }))
+        setIsLoader(false)
+      } catch (e) {
+        message(e.message)
+      }
+    }
+
+    Boolean(token) ? getUser() : setIsLoader(false)
+  }, []) // eslint-disable-line
 
   return (
-    // <div className="App">
-    //   {isAuth && <Navbar />}
-    //   <div className="container">
-    //     {useRoutes(isAuth)}
-    //   </div>
-    // </div>
     <div className="App">
-      <Navbar />
-      <div className="container">
-        <Home />
-      </div>
+      {isLoader ? <Loader /> : <>
+        <Toast />
+        {user.isAuth && <Navbar />}
+        <div className="container">
+          {Routes(user.isAuth)}
+        </div>
+      </>}
     </div>
   )
 }

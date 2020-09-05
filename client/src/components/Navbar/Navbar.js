@@ -19,7 +19,11 @@ const Navbar = () => {
          <div className="container">
             <div className="Navbar__inner">
                <span className="logo">Chat</span>
-               <NavLink to="/" onClick={logoutHandler}>Выйти</NavLink>
+               <div>
+                  <NavLink to="/">Диалоги</NavLink>
+                  <NavLink to="/profile">Профиль</NavLink>
+                  <NavLink to="/" onClick={logoutHandler}>Выйти</NavLink>
+               </div>
             </div>
          </div>
       </nav>
