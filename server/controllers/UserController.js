@@ -41,10 +41,7 @@ const UserController = {
          const hashedPassword = await bcrypt.hash(password, 12)
 
          let avatarUrl = null
-         if (req.files) {
-            let path = saveFile(req.files.file, 'images') 
-            avatarUrl = path
-         } 
+         if (req.files) avatarUrl = saveFile(req.files.file, 'images') 
 
          const user = new User({ name, email, password: hashedPassword, avatarUrl })
          await user.save() 
@@ -153,7 +150,19 @@ const UserController = {
    getUsers: async (req, res) => {
       try {
          if (req.user) {
-            const users = await User.find()
+            const usersResponse = await User.find()
+            const users = usersResponse
+               .filter(user => user._id.toString() !== req.user.userId.toString())
+               .map(user => {
+                  return {
+                     _id: user._id,
+                     name: user.name,
+                     avatarUrl: user.avatarUrl,
+                     lastSeen: user.lastSeen,
+                     isOnline: user.isOnline
+                  }
+               })
+   
             res.json(users)
          } else {
             res.status(401).json({ message: 'Не зарегистрирован' })

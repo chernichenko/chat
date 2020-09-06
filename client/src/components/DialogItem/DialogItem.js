@@ -17,6 +17,8 @@ const DialogItem = ({
 
   const { color, colorLighten } = generateGradient('5f4b8fa976c6411cfcd44245')
 
+  console.log(avatar)
+
   return (
     <div className="DialogItem">
       <div className="DialogItem__column1">
