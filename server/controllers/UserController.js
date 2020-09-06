@@ -150,6 +150,18 @@ const UserController = {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
       }
    },
+   getUsers: async (req, res) => {
+      try {
+         if (req.user) {
+            const users = await User.find()
+            res.json(users)
+         } else {
+            res.status(401).json({ message: 'Не зарегистрирован' })
+         }
+      } catch (e) {
+         res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
+      }
+   },
 }
 
 module.exports = UserController

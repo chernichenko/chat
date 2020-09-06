@@ -52,7 +52,7 @@ const RegistrationTemplate = ({ loading, form, changeHandler, registerHandler })
                   name="file"
                   onChange={e => changeHandler(e)}
                />
-               <label htmlFor="file">{(form.file && form.file.name) ? form.file.name : 'Фото' }</label> 
+               <label htmlFor="file">{(form.file && form.file.name) ? form.file.name : 'Фото не выбрано' }</label> 
             </div>
 
          </div>

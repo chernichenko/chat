@@ -6,6 +6,7 @@ const {checkRegisterInputs, checkLoginInputs} = require('../utils/validators')
 const UserController = require('../controllers/UserController')
 const ProfileController = require('../controllers/ProfileController')
 const auth = require('../middleware/auth.middleware')
+const lastSeen = require('../middleware/lastSeen.middleware')
 
 const createRoutes = app => {
    app.use(cors())
@@ -20,8 +21,9 @@ const createRoutes = app => {
    app.post('/api/auth/login', checkLoginInputs, UserController.login)
    app.post('/api/auth/reset', UserController.reset)
    app.post('/api/auth/reset/finished', checkRegisterInputs, UserController.resetFinished)
-   app.get('/api/user', auth, UserController.getUser)
-   app.post('/api/profile', auth, ProfileController.changeUserInfo)
+   app.get('/api/user', auth, lastSeen, UserController.getUser)
+   app.get('/api/users', auth, UserController.getUsers)
+   app.post('/api/profile', auth, lastSeen, ProfileController.changeUserInfo)
 }
 
 module.exports = createRoutes

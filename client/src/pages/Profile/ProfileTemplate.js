@@ -28,7 +28,7 @@ const ProfileTemplate = ({ loading, form, changeHandler, saveProfileHandler }) =
               name="file"
               onChange={e => changeHandler(e)}
             />
-            <label htmlFor="file">{form.file ? form.file.name : avatarName ? avatarName : 'Фото'}</label>
+            <label htmlFor="file">{form.file ? form.file.name : avatarName ? avatarName : 'Фото не выбрано'}</label>
           </div>
 
         </div>
