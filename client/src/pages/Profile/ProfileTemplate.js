@@ -2,8 +2,11 @@ import React from 'react'
 import './Profile.scss'
 
 const ProfileTemplate = ({ loading, form, changeHandler, saveProfileHandler }) => {
-  const avatarUrlArr = form.avatarUrl.split('\\')
-  const avatarName = avatarUrlArr[avatarUrlArr.length - 1]
+  let avatarUrlArr, avatarName
+  if (form.avatarUrl) {
+    avatarUrlArr = form.avatarUrl.split('\\')
+    avatarName = avatarUrlArr[avatarUrlArr.length - 1]
+  }
 
   return (
     <div className="Profile">

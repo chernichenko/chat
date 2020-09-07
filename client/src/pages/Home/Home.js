@@ -1,5 +1,6 @@
 import React from 'react'
 import './Home.scss'
+import { Route } from "react-router-dom"
 import { Sidebar, Dialog } from 'components' 
 
 const Home = () => {
@@ -9,7 +10,7 @@ const Home = () => {
         <Sidebar />
       </div>
       <div className="Home__column2">
-        <Dialog /> 
+        <Route component={Dialog} path="/:id" />
       </div>
     </div>    
   );

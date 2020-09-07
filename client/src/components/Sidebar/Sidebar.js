@@ -1,8 +1,8 @@
 import './Sidebar.scss'
 import React, { useState, useEffect } from 'react'
-import { DialogItem } from 'components'
 import { useHttp, useMessage } from 'hooks'
 import { useSelector } from 'react-redux'
+import { DialogItem, Search } from 'components'
 
 // let dialogs = [
 //   {
@@ -51,13 +51,16 @@ const Sidebar = () => {
   const { request } = useHttp()
   const message = useMessage()
   const user = useSelector(state => state.user)
+
   const [dialogs, setDialogs] = useState()
+  const [initialDialogs, setInitialDialogs] = useState()
 
   useEffect(() => {
     const getUsers = async () => {
       try {
         const users = await request(`/api/users/`, 'GET', null, { auth: `Che ${user.token}` })
         setDialogs(users)
+        setInitialDialogs(users)
       } catch (e) {
         message(e.message)
       }
@@ -69,20 +72,18 @@ const Sidebar = () => {
   return (
     <div className="Sidebar">
       <div className="Sidebar__top">
-        <div className="Input">
-          <input
-            placeholder="Поиск среди контактов"
-            type="text"
-            name="search"
-          />
-        </div>
+        <Search
+          initialDialogs={initialDialogs}
+          dialogs={dialogs}
+          setDialogs={setDialogs}
+        />
       </div>
       <div className="Sidebar__dialogs">
-        {dialogs && dialogs.map(item => {
-          console.log(item)
+        {dialogs && dialogs.map((item, key) => {
           return (
             <DialogItem
-              key={item._id}
+              key={item.name + key}
+              id={item._id}
               avatar={item.avatarUrl}
               isOnline={item.isOnline}
               name={item.name} 

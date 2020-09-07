@@ -6,13 +6,12 @@ const Routes = isAuth => {
    return (
       isAuth
       ? <Switch>
-         <Route path="/" exact>
-            <Home />
-         </Route>
-         <Route path="/profile" exact>
+         <Route path="/profile">
             <Profile />
          </Route>
-         <Redirect to="/" />
+         <Route path="/">
+            <Home />
+         </Route>
       </Switch>
       :
       <Switch>
