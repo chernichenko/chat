@@ -15,6 +15,7 @@ const userReducer = (state = initialState, { type, payload }) => {
             token: payload.token
          }))
          return {
+            id: payload._id,
             name: payload.name,
             avatarUrl: payload.avatarUrl,
             isAuth: true,
@@ -27,12 +28,7 @@ const userReducer = (state = initialState, { type, payload }) => {
             token: null
          }
       case SET_USER:
-         return {
-            name: payload.name,
-            avatarUrl: payload.avatarUrl,
-            isAuth: payload.isAuth,
-            token: payload.token
-         }
+         return { ...payload }
       default:
          return state
    }

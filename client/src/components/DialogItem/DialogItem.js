@@ -17,7 +17,7 @@ const DialogItem = ({
   newMessagesCount
 }) => {
 
-  const { color, colorLighten } = generateGradient('5f4b8fa976c6411cfcd44245')
+  const { color, colorLighten } = generateGradient(id)
 
   return (
     <NavLink to={`/${id}`}>

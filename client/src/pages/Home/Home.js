@@ -10,7 +10,7 @@ const Home = () => {
         <Sidebar />
       </div>
       <div className="Home__column2">
-        <Route component={Dialog} path="/:id" />
+        <Route component={Dialog} path="/:userToId" />
       </div>
     </div>    
   );

@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Picker } from 'emoji-mart'
 import smileSvg from 'assets/icons/smile.svg'
 import sendSvg from 'assets/icons/send.svg'
+import { useHttp, useMessage } from 'hooks'
 
-const Textarea = () => {
+const Textarea = ({ dialogId, user }) => {
+   const { request } = useHttp()
+   const message = useMessage()
+
    const [value, setValue] = useState('')
    const [isEmojiOpen, setIsEmojiOpen] = useState(false)
 
@@ -21,14 +25,21 @@ const Textarea = () => {
       setIsEmojiOpen(false)
    }
 
-   const sendHandler = () => {
-      console.log('Send', value)
-   }
-
    const keyHandler = e => {
       if (e.keyCode === 13) sendHandler()
    }
 
+   const sendHandler = () => {
+      try {
+         if (value) {
+            await request(`/api/message/`, 'POST ', { text: value, dialog: dialogId }, { auth: `Che ${user.token}` })
+            setValue('')
+         }
+      } catch (e) {
+         message(e.message)
+      }
+   }
+   
    return (
       <div className="Dialog__input-wrap">
          {isEmojiOpen

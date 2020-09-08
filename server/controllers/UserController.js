@@ -138,7 +138,9 @@ const UserController = {
    getUser: async (req, res) => {
       try {
          if (req.user) {
-            const user = await User.findOne({ _id: req.user.userId })
+            const { userToId } = req.body
+            const userId = userToId ? userToId : req.user.userId
+            const user = await User.findOne({ _id: userId })
             res.json(user)
          } else {
             res.status(401).json({ message: 'Не зарегистрирован' })
