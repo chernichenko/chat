@@ -8,14 +8,17 @@ const useHttp = () => {
       let response
       setLoading(true)
       
+      const request = {
+         method: method.toLowerCase(),
+         baseURL: 'http://localhost:5000',
+         url,
+         headers
+      }
+      if (method === 'GET') request['params'] = data
+      if (method === 'POST') request['data'] = data
+       
       try {
-         response = await axios({
-            baseURL: 'http://localhost:5000',
-            url,
-            method: method.toLowerCase(),
-            data,
-            headers
-         })
+         response = await axios(request)
          
          response = await response.data
          setLoading(false)

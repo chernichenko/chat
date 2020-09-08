@@ -17,7 +17,7 @@ const Login = () => {
    const loginHandler = async () => {
       try {
          const data = await request('/api/auth/login', 'POST', {...form})
-         dispatch(Actions.login(data))
+         dispatch(Actions.login({ ...data, isAuth: true }))
       } catch (e) { message(e.message) }
    }
 

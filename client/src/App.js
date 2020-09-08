@@ -22,7 +22,7 @@ const App = () => {
       try {
         const userFromAPI = await request(`/api/user/`, 'GET', null, { auth: `Che ${token}` })
         dispatch(Actions.setUser({
-          id: userFromAPI._id,
+          id: userFromAPI.id,
           name: userFromAPI.name,
           avatarUrl: userFromAPI.avatarUrl,
           isAuth: true,

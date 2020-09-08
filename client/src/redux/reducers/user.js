@@ -14,13 +14,7 @@ const userReducer = (state = initialState, { type, payload }) => {
          localStorage.setItem(STORAGE_NAME, JSON.stringify({
             token: payload.token
          }))
-         return {
-            id: payload._id,
-            name: payload.name,
-            avatarUrl: payload.avatarUrl,
-            isAuth: true,
-            token: payload.token
-         }
+         return { ...payload }
       case LOGOUT:
          localStorage.removeItem(STORAGE_NAME)
          return {

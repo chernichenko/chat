@@ -85,7 +85,7 @@ const UserController = {
             { expiresIn: '24h' }
          ) 
    
-         res.json({ name: user.name, avatarUrl: user.avatarUrl, token }) 
+         res.json({ id: user.id, name: user.name, avatarUrl: user.avatarUrl, token }) 
    
       } catch (e) {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
@@ -138,7 +138,7 @@ const UserController = {
    getUser: async (req, res) => {
       try {
          if (req.user) {
-            const { userToId } = req.body
+            const { userToId } = req.query
             const userId = userToId ? userToId : req.user.userId
             const user = await User.findOne({ _id: userId })
             res.json(user)

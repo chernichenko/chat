@@ -18,36 +18,42 @@ const Dialog = () => {
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
-    try {
-      const userToResponse = await request(`/api/user/`, 'GET', { userToId }, { auth: `Che ${userMy.token}` })
-      setUserTo(userToResponse)
-
-      const dialogResponse = await request(`/api/dialog/`, 'GET', { userToId }, { auth: `Che ${userMy.token}` })
-      setDialog(dialogResponse)
-
-      if (dialogResponse.lastMessage) {
-        const messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogResponseId }, { auth: `Che ${userMy.token}` })
-        setMessages(messagesResponse)
+    const getInfo = async () => { 
+      try {
+        const userToResponse = await request(`/api/user/`, 'GET', { userToId }, { auth: `Che ${userMy.token}` })
+        setUserTo(userToResponse)
+        // console.log('userToResponse', userToResponse)
+  
+        const dialogResponse = await request(`/api/dialog/`, 'GET', { userToId }, { auth: `Che ${userMy.token}` })
+        setDialog(dialogResponse)
+        console.log('dialogResponse', dialogResponse)
+  
+        // if (dialogResponse.lastMessage) {
+        //   const messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogResponseId }, { auth: `Che ${userMy.token}` })
+        //   setMessages(messagesResponse)
+        // }
+      } catch (e) {
+        message(e.message)
       }
-    } catch (e) {
-      message(e.message)
     }
-  }, [])
+    
+    getInfo()
+  }, [userToId]) // eslint-disable-line
 
   return (
     <div className="Dialog">
       <Top name={userTo.name} />
       <div id="messages" className="Dialog__messages">
-        {messages.length 
-        ? <>
-          <Message isMe="true" />
-          <Message isMe="true" />
-          <Message />
-          <Message isMe="true" />
-        </>
-        : <span class="Dialog__no-messages">Сообищение пока нет.</span>}
+        {messages.length
+          ? <>
+            <Message isMe="true" />
+            <Message isMe="true" />
+            <Message />
+            <Message isMe="true" />
+          </>
+          : <span className="Dialog__no-messages">Сообищение пока нет.</span>}
       </div>
-      <Textarea 
+      <Textarea
         dialogId={dialog.id}
         user={userMy}
       />

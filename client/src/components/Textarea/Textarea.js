@@ -29,7 +29,7 @@ const Textarea = ({ dialogId, user }) => {
       if (e.keyCode === 13) sendHandler()
    }
 
-   const sendHandler = () => {
+   const sendHandler = async () => {
       try {
          if (value) {
             await request(`/api/message/`, 'POST ', { text: value, dialog: dialogId }, { auth: `Che ${user.token}` })
