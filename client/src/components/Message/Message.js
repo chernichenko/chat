@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames/bind'
 
-const Message = ({ isMe }) => {
+const Message = ({ text, avatarUrl, isMe, isRead, time }) => {
    let cls = classNames({
       'Message': true,
       'me': isMe
@@ -10,11 +10,11 @@ const Message = ({ isMe }) => {
    return (
       <div className={cls}>
          <div className="Message__avatar">
-            <img src="https://source.unsplash.com/random/1" alt="" />
+            <img src={avatarUrl} alt="" />
          </div>
          <div className="Message__content">
-            <div className="Message__text">123</div>
-            <div className="Message__time">Вчера, в 13:23</div>
+            <div className="Message__text">{text}</div>
+            <div className="Message__time">{time}</div>
          </div>
       </div>
    )

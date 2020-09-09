@@ -4,7 +4,7 @@ import smileSvg from 'assets/icons/smile.svg'
 import sendSvg from 'assets/icons/send.svg'
 import { useHttp, useMessage } from 'hooks'
 
-const Textarea = ({ dialogId, user }) => {
+const Textarea = ({ dialogId, user, setIsLoader, setRefresh }) => {
    const { request } = useHttp()
    const message = useMessage()
 
@@ -32,7 +32,9 @@ const Textarea = ({ dialogId, user }) => {
    const sendHandler = async () => {
       try {
          if (value) {
+            setIsLoader(false)
             await request(`/api/message/`, 'POST ', { text: value, dialog: dialogId }, { auth: `Che ${user.token}` })
+            setRefresh(prevState => prevState + 1)
             setValue('')
          }
       } catch (e) {

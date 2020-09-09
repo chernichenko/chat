@@ -10,10 +10,10 @@ const DialogController = {
                 let dialog = await Dialog.find()
                     .or([{ author: ID1, partner: ID2 }, { author: ID2, partner: ID1 }])
 
-                // if (!dialog.length) {
-                //     dialog = new Dialog({ author: ID1, partner: ID2 })
-                //     await dialog.save() 
-                // }
+                if (!dialog.length) {
+                    dialog = new Dialog({ author: ID1, partner: ID2 })
+                    await dialog.save() 
+                }
 
                 res.json(dialog)
             } else {

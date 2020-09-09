@@ -4,7 +4,7 @@ const MessageController = {
     getMessages: async (req, res) => {
         try {
             if (req.user) {
-                const { dialogId } = req.body
+                const { dialogId } = req.query
                 let messages = await Message.find({ dialog: dialogId })
                 res.json(messages)
             } else {
