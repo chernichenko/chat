@@ -1,7 +1,7 @@
 import './Dialog.scss'
 import 'emoji-mart/css/emoji-mart.css'
 import React, { useState, useEffect } from 'react'
-import { Top, Textarea } from 'components'
+import { Top, Textarea, Messages } from 'components'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useHttp, useMessage } from 'hooks'

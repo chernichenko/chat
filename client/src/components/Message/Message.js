@@ -2,10 +2,7 @@ import React from 'react'
 import classNames from 'classnames/bind'
 
 const Message = ({ text, avatarUrl, isMe, isRead, time }) => {
-   let cls = classNames({
-      'Message': true,
-      'me': isMe
-   })
+   let cls = classNames({ 'Message': true, 'me': isMe })
 
    return (
       <div className={cls}>

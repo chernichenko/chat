@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useHttp, useMessage } from 'hooks'
 import { useSelector } from 'react-redux'
 import { DialogItem, Search } from 'components'
+import { getFormatedTime } from 'utils/date'
 
 // let dialogs = [
 //   {
@@ -88,7 +89,7 @@ const Sidebar = () => {
               isOnline={item.isOnline}
               name={item.name} 
               lastMessage={'Test'}
-              time={'Вчера'}
+              time={getFormatedTime(new Date())}
               isMe={true}
               isRead={false}
               newMessagesCount={0}

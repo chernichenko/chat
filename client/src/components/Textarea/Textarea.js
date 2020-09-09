@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Picker } from 'emoji-mart'
-import smileSvg from 'assets/icons/smile.svg'
-import sendSvg from 'assets/icons/send.svg'
 import { useHttp, useMessage } from 'hooks'
+import TextareaTemplate from './TextareaTemplate'
 
 const Textarea = ({ dialogId, user, setIsLoader, setRefresh }) => {
    const { request } = useHttp()
@@ -43,30 +41,15 @@ const Textarea = ({ dialogId, user, setIsLoader, setRefresh }) => {
    }
    
    return (
-      <div className="Dialog__input-wrap">
-         {isEmojiOpen
-            ? <div className="Dialog__emoji-picker">
-               <Picker
-                  onSelect={emojiTag => addEmoji(emojiTag)}
-                  set="apple"
-               />
-            </div>
-            : <div className="Dialog__emoji-button">
-               <img src={smileSvg} alt="" onClick={() => setIsEmojiOpen(true)} />
-            </div>}
-
-         <div className="Input">
-            <input
-               placeholder="Введите текст сообщения…"
-               value={value}
-               onChange={e => setValue(e.target.value)}
-               onKeyDown={keyHandler}
-            />
-            <div className="send" onClick={sendHandler}>
-               <img src={sendSvg} alt="" onClick={() => { }} />
-            </div>
-         </div>
-      </div>
+      <TextareaTemplate
+         isEmojiOpen={isEmojiOpen}
+         addEmoji={addEmoji}
+         setIsEmojiOpen={setIsEmojiOpen}
+         value={value}
+         setValue={setValue}
+         keyHandler={keyHandler}
+         sendHandler={sendHandler}
+      />
    )
 }
 

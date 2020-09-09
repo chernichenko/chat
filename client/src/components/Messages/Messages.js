@@ -1,20 +1,9 @@
-import './Dialog.scss'
 import 'emoji-mart/css/emoji-mart.css'
 import React from 'react'
 import { Message, Loader } from 'components'
-
-import format from 'date-fns/format'
-import isToday from 'date-fns/is_today'
+import { getFormatedTime } from 'utils/date'
 
 const Messages = ({ isLoader, messages, userMy, userTo }) => {
-
-    const getMessageTime = createdAt => {
-        if (isToday(createdAt)) {
-            return format(createdAt, 'HH:mm')
-        } else {
-            return format(createdAt, 'DD.MM.YYYY')
-        }
-    }
 
     return (
         <div id="messages" className="Dialog__messages">
@@ -31,7 +20,7 @@ const Messages = ({ isLoader, messages, userMy, userTo }) => {
                         avatarUrl={avatarUrl}
                         isMe={isMe}
                         isRead={message.isRead}
-                        time={'Вчера, в 13:23'}
+                        time={getFormatedTime(new Date())}
                     />
                 )
             })
