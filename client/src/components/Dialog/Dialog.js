@@ -21,55 +21,61 @@ const Dialog = () => {
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
-    const getInfo = async () => { 
+    const getInfo = async () => {
       try {
-        const userToResponse = await request(`/api/user/`, 'GET', { userToId }, headers)
-        setUserTo(userToResponse)
-        console.log('userToResponse', userToResponse)
-  
-        const dialogResponse = await request(`/api/dialog/`, 'GET', { userToId }, headers)
-        setDialog(dialogResponse)
-        console.log('dialogResponse', dialogResponse)
-  
-        if (dialogResponse.lastMessage) setMessages(getMessages(dialogResponse.id))
+        let messagesResponse = []
+        setIsLoader(true)
 
+        const userToResponse = await request(`/api/user/`, 'GET', { userToId }, headers)
+
+        const dialogResponse = await request(`/api/dialog/`, 'GET', { userToId }, headers)
+
+        if (dialogResponse.lastMessage) messagesResponse = await getMessages(dialogResponse._id)
+
+        setUserTo(userToResponse)
+        setDialog(dialogResponse)
+        setMessages(messagesResponse)
         setRefresh(prevState => prevState + 1)
         setIsLoader(false)
+        scrollMessages()
       } catch (e) {
         message(e.message)
       }
     }
-    
+
     getInfo()
   }, [userToId]) // eslint-disable-line
 
   useEffect(() => {
-    if (Boolean(refresh)) {
-      console.log('refresh')
-      setMessages(getMessages(dialog.id))
-      setIsLoader(false)
+    const getMessagesRefresh = async () => {
+      setMessages(await getMessages(dialog._id))
+      scrollMessages()
     }
+    if (refresh > 1) getMessagesRefresh()
   }, [refresh]) // eslint-disable-line
-  
+
   const getMessages = async dialogId => {
     const messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogId }, headers)
-    console.log('messagesResponse', messagesResponse)
     return messagesResponse
+  }
+
+  const scrollMessages = () => {
+    const messagesWrap = document.getElementById('messages')
+    messagesWrap.scrollTop = messagesWrap.scrollHeight
   }
 
   return (
     <div className="Dialog">
       <Top name={userTo.name} />
-      <Messages 
+      <Messages
         isLoader={isLoader}
         messages={messages}
         userMy={userMy}
         userTo={userTo}
       />
       <Textarea
-        dialogId={dialog.id}
+        dialogId={dialog._id}
         user={userMy}
-        setIsLoader={setIsLoader}
         setRefresh={setRefresh}
       />
     </div>

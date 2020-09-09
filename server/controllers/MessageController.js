@@ -1,4 +1,5 @@
 const Message = require('../models/Message')
+const Dialog = require('../models/Dialog')
 
 const MessageController = {
     getMessages: async (req, res) => {
@@ -18,9 +19,15 @@ const MessageController = {
         try {
             if (req.user) {
                 const { text, dialog } = req.body
-                
-                const message = new Message({ text, dialog, user: req.user.id })
+
+                const message = new Message({ text, dialog, user: req.user.userId })
+
+                const dialogFromDB = await Dialog.findOne({ _id: dialog })
+                dialogFromDB.lastMessage = message._id
+
+                await dialogFromDB.save()
                 await message.save() 
+
                 res.json({ isSended: true })
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })

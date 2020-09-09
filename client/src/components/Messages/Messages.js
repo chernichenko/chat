@@ -10,12 +10,13 @@ const Messages = ({ isLoader, messages, userMy, userTo }) => {
             {isLoader
             ? <Loader />
             : messages.length
-            ? messages.map(message => {
+            ? messages.map((message, index) => {
                 const isMe = userMy.id.toString() === message.user.toString()
                 const avatarUrl = isMe ? userMy.avatarUrl : userTo.avatarUrl
 
                 return (
                     <Message
+                        key={index}
                         text={message.text}
                         avatarUrl={avatarUrl}
                         isMe={isMe}

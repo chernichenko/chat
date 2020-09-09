@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useHttp, useMessage } from 'hooks'
 import TextareaTemplate from './TextareaTemplate'
 
-const Textarea = ({ dialogId, user, setIsLoader, setRefresh }) => {
+const Textarea = ({ dialogId, user, setRefresh }) => {
    const { request } = useHttp()
    const message = useMessage()
 
    const [value, setValue] = useState('')
    const [isEmojiOpen, setIsEmojiOpen] = useState(false)
-
-   useEffect(() => {
-      let messagesWrap = document.getElementById('messages')
-      messagesWrap.scrollTop = messagesWrap.scrollHeight
-   }, [])
 
    const addEmoji = (e) => {
       let sym = e.unified.split('-')
@@ -30,8 +25,7 @@ const Textarea = ({ dialogId, user, setIsLoader, setRefresh }) => {
    const sendHandler = async () => {
       try {
          if (value) {
-            setIsLoader(false)
-            await request(`/api/message/`, 'POST ', { text: value, dialog: dialogId }, { auth: `Che ${user.token}` })
+            await request(`/api/message/`, 'POST', { text: value, dialog: dialogId }, { auth: `Che ${user.token}` })
             setRefresh(prevState => prevState + 1)
             setValue('')
          }

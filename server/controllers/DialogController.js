@@ -7,10 +7,10 @@ const DialogController = {
                 const ID1 = req.user.userId
                 const ID2 = req.query.userToId
  
-                let dialog = await Dialog.find()
+                let dialog = await Dialog.findOne()
                     .or([{ author: ID1, partner: ID2 }, { author: ID2, partner: ID1 }])
 
-                if (!dialog.length) {
+                if (!dialog) {
                     dialog = new Dialog({ author: ID1, partner: ID2 })
                     await dialog.save() 
                 }
