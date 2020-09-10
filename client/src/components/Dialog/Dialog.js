@@ -5,7 +5,7 @@ import { Top, Textarea, Messages } from 'components'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useHttp, useMessage } from 'hooks'
-import socket from 'core/socket'
+// import socket from 'core/socket'
 
 const Dialog = () => {
   const { request } = useHttp()
@@ -46,18 +46,18 @@ const Dialog = () => {
   }, [userToId]) // eslint-disable-line
 
   useEffect(() => {
-    socket.on('MESSAGE:NEW', data => {
-      // Check if this my dialog.
-      // Add message to state
+    // socket.on('MESSAGE:NEW', data => {
+    //   // Check if this my dialog.
+    //   // Add message to state
 
-      setMessages(prevMessages => {
-        return {
-          ...prevMessages,
-          newMessage
-        }
-      })
-      scrollMessages()
-    })
+    //   // setMessages(prevMessages => {
+    //   //   return {
+    //   //     ...prevMessages,
+    //   //     newMessage
+    //   //   }
+    //   // })
+    //   // scrollMessages()
+    // })
   }, []) // eslint-disable-line
 
   const scrollMessages = () => {

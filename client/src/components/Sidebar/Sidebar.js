@@ -53,16 +53,23 @@ const Sidebar = () => {
   const { request } = useHttp()
   const message = useMessage()
   const user = useSelector(state => state.user)
+  const headers = { auth: `Che ${user.token}` }
 
   const [dialogs, setDialogs] = useState()
   const [initialDialogs, setInitialDialogs] = useState()
 
+  // For socket 
+  const [refresh, setRefresh] = useState(0)
+  const [changedUserState, setChangedUserState] = useState()
+
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const users = await request(`/api/users/`, 'GET', null, { auth: `Che ${user.token}` })
-        setDialogs(users)
-        setInitialDialogs(users)
+        const dialogItemsResponse = await request(`/api/dialogs/sidebar`, 'GET', null, headers)
+        console.log(dialogItemsResponse)
+
+        setDialogs(dialogItemsResponse)
+        setInitialDialogs(dialogItemsResponse)
       } catch (e) {
         message(e.message)
       }
@@ -73,13 +80,26 @@ const Sidebar = () => {
 
   useEffect(() => {
     socket.on('USER:UPDATE_STATUS', data => {
-      // Find dialog with data.userId
-      // update isOnline: data.isOnline
-    })
-    socket.on('MESSAGE:NEW', data => {
-      // refresh dialogs 
-    })
+      setChangedUserState(data)
+      setRefresh(prevState => prevState + 1)
+    }) // eslint-disable-line
+    
+    // socket.on('MESSAGE:NEW', data => {
+    //   // refresh dialogs 
+    // })
   }, []) // eslint-disable-line
+
+  useEffect(() => {
+    if (refresh) {
+      const newDialogs = dialogs.map(dialog => {
+        if (dialog._id.toString() === changedUserState.id.toString()) {
+          return { ...dialog, isOnline: changedUserState.isOnline }
+        }
+        return dialog
+      })
+      setDialogs(newDialogs)
+    }
+  }, [refresh]) // eslint-disable-line
 
   return (
     <div className="Sidebar">

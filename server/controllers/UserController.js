@@ -91,8 +91,8 @@ class UserController {
          ) 
 
          this.io.emit('USER:UPDATE_STATUS', { id: user.id, isOnline: true })
-   
-         res.json({ id: user.id, name: user.name, avatarUrl: user.avatarUrl, token }) 
+         const userResponser = { id: user.id, name: user.name, avatarUrl: user.avatarUrl, token }
+         res.json(userResponser) 
    
       } catch (e) {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
@@ -151,32 +151,9 @@ class UserController {
             const { userToId } = req.query
             const userId = userToId ? userToId : req.user.userId
             const user = await User.findOne({ _id: userId })
-            res.json(user)
-         } else {
-            res.status(401).json({ message: 'Не зарегистрирован' })
-         }
-      } catch (e) {
-         res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
-      }
-   }
 
-   getUsers = async (req, res) => {
-      try {
-         if (req.user) {
-            const usersResponse = await User.find()
-            const users = usersResponse
-               .filter(user => user._id.toString() !== req.user.userId.toString())
-               .map(user => {
-                  return {
-                     _id: user._id,
-                     name: user.name,
-                     avatarUrl: user.avatarUrl,
-                     lastSeen: user.lastSeen,
-                     isOnline: user.isOnline
-                  }
-               })
-   
-            res.json(users)
+            this.io.emit('USER:UPDATE_STATUS', { id: userId, isOnline: true })
+            res.json(user)
          } else {
             res.status(401).json({ message: 'Не зарегистрирован' })
          }

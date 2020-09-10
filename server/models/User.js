@@ -15,7 +15,7 @@ const UserSchema = new Schema({
 
 UserSchema.virtual("isOnline").get(function () {
    const now = new Date()
-   const diffMs =  now - this.lastSeen
+   const diffMs =  now.getTime() - this.lastSeen.getTime()
    const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000) // minutes
    return diffMins < 5
 })

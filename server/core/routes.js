@@ -11,10 +11,10 @@ const DialogCtrl = require('../controllers/DialogController')
 const MessageCtrl = require('../controllers/MessageController')
 
 const createRoutes = (app, io) => {
-   const UserController = UserCtrl(io)
-   const ProfileController = ProfileCtrl(io)
-   const DialogController = DialogCtrl(io)
-   const MessageController = MessageCtrl(io)
+   const UserController = new UserCtrl(io)
+   const ProfileController = new ProfileCtrl(io)
+   const DialogController = new DialogCtrl(io)
+   const MessageController = new MessageCtrl(io)
 
    app.use(cors())
    app.use(fileUpload())
@@ -30,10 +30,10 @@ const createRoutes = (app, io) => {
    app.post('/api/auth/reset/finished', checkRegisterInputs, UserController.resetFinished)
 
    app.get('/api/user', auth, lastSeen, UserController.getUser)
-   app.get('/api/users', auth, UserController.getUsers)
    app.post('/api/profile', auth, lastSeen, ProfileController.changeUserInfo)
 
    app.get('/api/dialog', auth, DialogController.getDialog)
+   app.get('/api/dialogs/sidebar', auth, DialogController.getDialogsToSidebar)
    
    app.get('/api/messages', auth, MessageController.getMessages)
    app.post('/api/message', auth, MessageController.sendMessage)
