@@ -1,8 +1,12 @@
 const User = require('../models/User')
 const { saveFile } = require('../utils/utils')
 
-const ProfileController = {
-   changeUserInfo: async (req, res) => {
+class ProfileController {
+   constructor(io) {
+      this.io = io
+   }
+
+   changeUserInfo = async (req, res) => {
       try {
          if (req.user) {
             const user = await User.findOne({ _id: req.user.userId })

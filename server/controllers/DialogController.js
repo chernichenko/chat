@@ -1,7 +1,11 @@
 const Dialog = require('../models/Dialog')
 
-const DialogController = {
-    getDialog: async (req, res) => {
+class DialogController {
+    constructor(io) {
+        this.io = io
+    }
+
+    getDialog = async (req, res) => {
         try {
             if (req.user) {
                 const ID1 = req.user.userId

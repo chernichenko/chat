@@ -4,6 +4,7 @@ import { useHttp, useMessage } from 'hooks'
 import { useSelector } from 'react-redux'
 import { DialogItem, Search } from 'components'
 import { getFormatedTime } from 'utils/date'
+import socket from 'core/socket'
 
 // let dialogs = [
 //   {
@@ -68,6 +69,16 @@ const Sidebar = () => {
     }
 
     getUsers()
+  }, []) // eslint-disable-line
+
+  useEffect(() => {
+    socket.on('USER:UPDATE_STATUS', data => {
+      // Find dialog with data.userId
+      // update isOnline: data.isOnline
+    })
+    socket.on('MESSAGE:NEW', data => {
+      // refresh dialogs 
+    })
   }, []) // eslint-disable-line
 
   return (

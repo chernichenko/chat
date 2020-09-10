@@ -7,9 +7,10 @@ const Actions = {
          payload: data
       }
    },
-   logout: () => {
+   logout: data => {
       return {
-         type: LOGOUT
+         type: LOGOUT,
+         payload: data
       }
    },
    setUser: data => {

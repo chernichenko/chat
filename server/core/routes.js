@@ -5,12 +5,17 @@ const cors = require('cors')
 const {checkRegisterInputs, checkLoginInputs} = require('../utils/validators')
 const auth = require('../middleware/auth.middleware')
 const lastSeen = require('../middleware/lastSeen.middleware')
-const UserController = require('../controllers/UserController')
-const ProfileController = require('../controllers/ProfileController')
-const DialogController = require('../controllers/DialogController')
-const MessageController = require('../controllers/MessageController')
+const UserCtrl = require('../controllers/UserController')
+const ProfileCtrl = require('../controllers/ProfileController')
+const DialogCtrl = require('../controllers/DialogController')
+const MessageCtrl = require('../controllers/MessageController')
 
-const createRoutes = app => {
+const createRoutes = (app, io) => {
+   const UserController = UserCtrl(io)
+   const ProfileController = ProfileCtrl(io)
+   const DialogController = DialogCtrl(io)
+   const MessageController = MessageCtrl(io)
+
    app.use(cors())
    app.use(fileUpload())
    app.use(express.static('images'))

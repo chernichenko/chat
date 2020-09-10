@@ -14,8 +14,12 @@ const transporter = nodemailer.createTransport(sendgrid({
    auth: {api_key: config.get('SENDGRID_API_KEY')}
 }))
 
-const UserController = {
-   register: async (req, res) => {
+class UserController {
+   constructor(io) {
+      this.io = io
+   }
+
+   register = async (req, res) => {
       try {
          const errors = validationResult(req)
 
@@ -52,8 +56,9 @@ const UserController = {
       } catch (error) {
          res.status(500).json({ message: '123124' })
       }
-   },
-   login: async (req, res) => {
+   }
+
+   login = async (req, res) => {
       try {
          const errors = validationResult(req)
    
@@ -84,14 +89,17 @@ const UserController = {
             config.get('jwtSecret'),
             { expiresIn: '24h' }
          ) 
+
+         this.io.emit('USER:UPDATE_STATUS', { id: user.id, isOnline: true })
    
          res.json({ id: user.id, name: user.name, avatarUrl: user.avatarUrl, token }) 
    
       } catch (e) {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
       }
-   },
-   reset: (req, res) => {
+   }
+
+   reset = (req, res) => {
       try {
          crypto.randomBytes(32, async (err, buffer) => {
             if (err) {
@@ -114,8 +122,9 @@ const UserController = {
       } catch(e) {
          console.log(e)
       }
-   },
-   resetFinished: async (req, res) => {
+   }
+
+   resetFinished = async (req, res) => {
       try {
          const user = await User.findOne({
             resetToken: req.body.token,
@@ -134,8 +143,9 @@ const UserController = {
       } catch (e) {
          console.log(e)
       }
-   },
-   getUser: async (req, res) => {
+   }
+
+   getUser = async (req, res) => {
       try {
          if (req.user) {
             const { userToId } = req.query
@@ -148,8 +158,9 @@ const UserController = {
       } catch (e) {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
       }
-   },
-   getUsers: async (req, res) => {
+   }
+
+   getUsers = async (req, res) => {
       try {
          if (req.user) {
             const usersResponse = await User.find()
@@ -172,7 +183,7 @@ const UserController = {
       } catch (e) {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
       }
-   },
+   }
 }
 
 module.exports = UserController

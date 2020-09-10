@@ -1,8 +1,12 @@
 const Message = require('../models/Message')
 const Dialog = require('../models/Dialog')
 
-const MessageController = {
-    getMessages: async (req, res) => {
+class MessageController {
+    constructor(io) {
+        this.io = io
+    }
+
+    getMessages = async (req, res) => {
         try {
             if (req.user) {
                 const { dialogId } = req.query
@@ -20,8 +24,9 @@ const MessageController = {
         } catch (e) {
             res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
         }
-    },
-    sendMessage: async (req, res) => {
+    }
+
+    sendMessage = async (req, res) => {
         try {
             if (req.user) {
                 const { text, dialog } = req.body
@@ -34,6 +39,7 @@ const MessageController = {
                 await dialogFromDB.save()
                 await message.save() 
 
+                this.io.emit('MESSAGE:NEW', { dialogId: dialog, message: message })
                 res.json(message)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })

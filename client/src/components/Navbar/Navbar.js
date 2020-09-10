@@ -1,16 +1,17 @@
 import './Navbar.scss'
 import React from 'react'
 import {useHistory, NavLink} from 'react-router-dom'
-import { useDispatch  } from 'react-redux'
+import { useSelector, useDispatch  } from 'react-redux'
 import Actions from 'redux/actions/user'
 
 const Navbar = () => {
    const history = useHistory()
    const dispatch = useDispatch()
+   const userId = useSelector(state => state.user.id)
 
    const logoutHandler = (e) => {
       e.preventDefault()
-      dispatch(Actions.logout())
+      dispatch(Actions.logout({ id: userId }))
       history.push('/')
    }
 
