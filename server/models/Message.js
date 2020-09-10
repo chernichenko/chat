@@ -11,7 +11,6 @@ const MessageSchema = new Schema({
 },
 {
    timestamps: true,
-   usePushEach: true,
 })
 
 module.exports = model('Message', MessageSchema)

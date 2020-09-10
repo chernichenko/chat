@@ -7,6 +7,12 @@ const MessageController = {
             if (req.user) {
                 const { dialogId } = req.query
                 let messages = await Message.find({ dialog: dialogId })
+
+                messages.sort((a, b) => {
+                    if (a.createdAt.getTime() > b.createdAt.getTime()) return false
+                    return true
+                })
+
                 res.json(messages)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })
@@ -28,7 +34,7 @@ const MessageController = {
                 await dialogFromDB.save()
                 await message.save() 
 
-                res.json({ isSended: true })
+                res.json(message)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })
             }

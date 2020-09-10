@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHttp, useMessage } from 'hooks'
 import TextareaTemplate from './TextareaTemplate'
 
-const Textarea = ({ dialogId, user, setRefresh }) => {
+const Textarea = ({ dialogId, user, setMessages, scrollMessages }) => {
    const { request } = useHttp()
    const message = useMessage()
 
@@ -25,8 +25,14 @@ const Textarea = ({ dialogId, user, setRefresh }) => {
    const sendHandler = async () => {
       try {
          if (value) {
-            await request(`/api/message/`, 'POST', { text: value, dialog: dialogId }, { auth: `Che ${user.token}` })
-            setRefresh(prevState => prevState + 1)
+            const newMessage = await request(`/api/message/`, 'POST', { text: value, dialog: dialogId }, { auth: `Che ${user.token}` })
+            setMessages(prevMessages => {
+               return {
+                  ...prevMessages,
+                  newMessage
+               }
+            })
+            scrollMessages()
             setValue('')
          }
       } catch (e) {

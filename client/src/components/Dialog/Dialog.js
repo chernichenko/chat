@@ -16,7 +16,6 @@ const Dialog = () => {
   const [userTo, setUserTo] = useState({})
 
   const [isLoader, setIsLoader] = useState(true)
-  const [refresh, setRefresh] = useState(0)
   const [dialog, setDialog] = useState({})
   const [messages, setMessages] = useState([])
 
@@ -30,12 +29,11 @@ const Dialog = () => {
 
         const dialogResponse = await request(`/api/dialog/`, 'GET', { userToId }, headers)
 
-        if (dialogResponse.lastMessage) messagesResponse = await getMessages(dialogResponse._id)
+        if (dialogResponse.lastMessage) messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogResponse._id }, headers)
 
         setUserTo(userToResponse)
         setDialog(dialogResponse)
         setMessages(messagesResponse)
-        setRefresh(prevState => prevState + 1)
         setIsLoader(false)
         scrollMessages()
       } catch (e) {
@@ -45,19 +43,6 @@ const Dialog = () => {
 
     getInfo()
   }, [userToId]) // eslint-disable-line
-
-  useEffect(() => {
-    const getMessagesRefresh = async () => {
-      setMessages(await getMessages(dialog._id))
-      scrollMessages()
-    }
-    if (refresh > 1) getMessagesRefresh()
-  }, [refresh]) // eslint-disable-line
-
-  const getMessages = async dialogId => {
-    const messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogId }, headers)
-    return messagesResponse
-  }
 
   const scrollMessages = () => {
     const messagesWrap = document.getElementById('messages')
@@ -76,7 +61,8 @@ const Dialog = () => {
       <Textarea
         dialogId={dialog._id}
         user={userMy}
-        setRefresh={setRefresh}
+        setMessages={setMessages}
+        scrollMessages={scrollMessages}
       />
     </div>
   )
