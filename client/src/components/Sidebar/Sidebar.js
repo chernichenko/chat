@@ -68,8 +68,8 @@ const Sidebar = () => {
         const dialogItemsResponse = await request(`/api/dialogs/sidebar`, 'GET', null, headers)
         console.log(dialogItemsResponse)
 
-        setDialogs(dialogItemsResponse)
-        setInitialDialogs(dialogItemsResponse)
+        // setDialogs(dialogItemsResponse)
+        // setInitialDialogs(dialogItemsResponse)
       } catch (e) {
         message(e.message)
       }
