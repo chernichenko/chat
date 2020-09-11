@@ -5,7 +5,7 @@ import { Top, Textarea, Messages } from 'components'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useHttp, useMessage } from 'hooks'
-// import socket from 'core/socket'
+import socket from 'core/socket'
 
 const Dialog = () => {
   const { request } = useHttp()
@@ -40,7 +40,7 @@ const Dialog = () => {
         setDialog(dialogResponse)
         setMessages(messagesResponse)
         setIsLoader(false)
-        setTimeout(() => scrollMessages(), 1000)
+        scrollMessages()
       } catch (e) {
         message(e.message)
       }
@@ -64,9 +64,13 @@ const Dialog = () => {
           newMessageState.message
         ]
       })
-      setTimeout(() => scrollMessages(), 1000)
+      scrollMessages()
     }
   }, [refreshNewMessage]) // eslint-disable-line
+
+  useEffect(() => {
+    scrollMessages()
+  }, [messages])
 
   const scrollMessages = () => {
     const messagesWrap = document.getElementById('messages')

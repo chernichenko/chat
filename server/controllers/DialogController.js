@@ -41,15 +41,19 @@ class DialogController {
 
                 dialogs = dialogs.map(dialog => {
                     let userTo
-                    if (userMyId.toString() === dialog.author._id.toString()) userTo = { ...dialog.partner }
-                    if (userMyId.toString() === dialog.partner._id.toString()) userTo = { ...dialog.author }
+                    if (userMyId.toString() === dialog.author._id.toString()) userTo = dialog.partner
+                    if (userMyId.toString() === dialog.partner._id.toString()) userTo = dialog.author
 
                     delete dialog.author
                     delete dialog.partner
 
-                    dialog.userTo = userTo
+                    const newDialog = {
+                        _id: dialog._id,
+                        userTo: userTo,
+                        lastMessage: dialog.lastMessage
+                    }
 
-                    return dialog
+                    return newDialog
                 })
 
                 res.json(dialogs)

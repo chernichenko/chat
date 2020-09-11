@@ -9,7 +9,7 @@ const Messages = ({ isLoader, messages, userMy, userTo }) => {
         <div id="messages" className="Dialog__messages">
             {isLoader 
             ? <Loader />
-            : messages.length
+            : (messages && messages.length)
             ? messages.map((message, index) => {
                 const isMe = userMy.id.toString() === message.user.toString()
                 const avatarUrl = isMe ? userMy.avatarUrl : userTo.avatarUrl
@@ -21,7 +21,7 @@ const Messages = ({ isLoader, messages, userMy, userTo }) => {
                         avatarUrl={avatarUrl}
                         isMe={isMe}
                         isRead={message.isRead}
-                        time={getFormatedTime(message.createdAt)}
+                        time={getFormatedTime(new Date(message.createdAt))}
                     />
                 )
             })

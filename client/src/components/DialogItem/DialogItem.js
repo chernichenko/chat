@@ -41,14 +41,14 @@ const DialogItem = ({
           <div className="DialogItem__name">{name}</div>
           <div className="DialogItem__message"><span>{lastMessage}</span></div>
         </div>
-        <div className="DialogItem__column3">
+        {lastMessage && <div className="DialogItem__column3">
           <div className="DialogItem__time">{time}</div>
           {isMe
           ? <div className="DialogItem__message-status">
             <img src={isRead ? check : noCheck} alt="" />
           </div>
           : <div className="DialogItem__message-count">1</div>}
-        </div>
+        </div>}
       </div>
     </NavLink>
   );

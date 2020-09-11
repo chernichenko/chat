@@ -12,7 +12,7 @@ const Sidebar = () => {
   const user = useSelector(state => state.user)
   const headers = { auth: `Che ${user.token}` }
 
-  const [dialogs, setDialogs] = useState()
+  const [dialogs, setDialogs] = useState([])
   const [initialDialogs, setInitialDialogs] = useState()
 
   // For socket 
@@ -98,9 +98,9 @@ const Sidebar = () => {
               avatar={item.userTo.avatarUrl}
               isOnline={item.userTo.isOnline}
               name={item.userTo.name}
-              lastMessage={item.lastMessage.text}
-              time={getFormatedTime(item.lastMessage.createdAt)}
-              isMe={user._id.toString() === item.lastMessage.user._id.toString()}
+              lastMessage={item.lastMessage ? item.lastMessage.text : ''}
+              time={item.lastMessage ? getFormatedTime(new Date(item.lastMessage.createdAt)) : ''}
+              isMe={item.lastMessage ? user.id.toString() === item.lastMessage.user.toString() : ''}
               isRead={false}
               newMessagesCount={0}
             />
