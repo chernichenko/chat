@@ -6,49 +6,6 @@ import { DialogItem, Search } from 'components'
 import { getFormatedTime } from 'utils/date'
 import socket from 'core/socket'
 
-// let dialogs = [
-//   {
-//     avatar: 'https://source.unsplash.com/random/1',
-//     isOnline: true,
-//     name: 'Jack The Ripper',
-//     lastMessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
-//     time: 'Сейчас',
-//     isMe: true,
-//     isRead: true,
-//     newMessagesCount: null,
-//   },
-//   {
-//     avatar: 'https://source.unsplash.com/random/2',
-//     isOnline: false,
-//     name: '222',
-//     lastMessage: 'Напиши как сможешь',
-//     time: '13:01',
-//     isMe: true,
-//     isRead: false,
-//     newMessagesCount: null,
-//   },
-//   {
-//     avatar: null,
-//     isOnline: false,
-//     name: 'Jack',
-//     lastMessage: 'Го в WatcpApp, я создал. Напиши как сможешь',
-//     time: 'Сейчас',
-//     isMe: false,
-//     isRead: true,
-//     newMessagesCount: null,
-//   },
-//   {
-//     avatar: 'https://source.unsplash.com/random/4',
-//     isOnline: true,
-//     name: '444',
-//     lastMessage: 'Напиши как сможешь',
-//     time: 'Сейчас',
-//     isMe: false,
-//     isRead: false,
-//     newMessagesCount: 2,
-//   }
-// ]
-
 const Sidebar = () => {
   const { request } = useHttp()
   const message = useMessage()
@@ -68,8 +25,8 @@ const Sidebar = () => {
         const dialogItemsResponse = await request(`/api/dialogs/sidebar`, 'GET', null, headers)
         console.log(dialogItemsResponse)
 
-        // setDialogs(dialogItemsResponse)
-        // setInitialDialogs(dialogItemsResponse)
+        setDialogs(dialogItemsResponse)
+        setInitialDialogs(dialogItemsResponse)
       } catch (e) {
         message(e.message)
       }
@@ -93,7 +50,13 @@ const Sidebar = () => {
     if (refresh) {
       const newDialogs = dialogs.map(dialog => {
         if (dialog._id.toString() === changedUserState.id.toString()) {
-          return { ...dialog, isOnline: changedUserState.isOnline }
+          return { 
+            ...dialog, 
+            userTo: { 
+              ...dialog.userTo, 
+              isOnline: changedUserState.isOnline 
+            } 
+          }
         }
         return dialog
       })
@@ -114,14 +77,14 @@ const Sidebar = () => {
         {dialogs && dialogs.map((item, key) => {
           return (
             <DialogItem
-              key={item.name + key}
-              id={item._id}
-              avatar={item.avatarUrl}
-              isOnline={item.isOnline}
-              name={item.name} 
-              lastMessage={'Test'}
-              time={getFormatedTime(new Date())}
-              isMe={true}
+              key={item.userTo._id + key}
+              id={item.userTo._id}
+              avatar={item.userTo.avatarUrl}
+              isOnline={item.userTo.isOnline}
+              name={item.userTo.name} 
+              lastMessage={item.lastMessage.text}
+              time={getFormatedTime(item.lastMessage.createdAt)}
+              isMe={user._id.toString() === item.lastMessage.user._id.toString()}
               isRead={false}
               newMessagesCount={0}
             />

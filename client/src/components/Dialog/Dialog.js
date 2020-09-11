@@ -67,7 +67,9 @@ const Dialog = () => {
 
   return (
     <div className="Dialog">
-      <Top name={userTo.name} />
+      <Top 
+        userTo={userTo} 
+      />
       <Messages
         isLoader={isLoader}
         messages={messages}

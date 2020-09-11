@@ -7,7 +7,7 @@ const Search = ({ initialDialogs, dialogs, setDialogs }) => {
    const changeHandler = e => {
       if (e.target.value) {
          const filteredDialogs = dialogs
-            .filter(dialog => dialog.name.toLowerCase().includes(e.target.value.toLowerCase()))
+            .filter(dialog => dialog.userTo.name.toLowerCase().includes(e.target.value.toLowerCase()))
          setDialogs(filteredDialogs)
       } else {
          setDialogs(initialDialogs)

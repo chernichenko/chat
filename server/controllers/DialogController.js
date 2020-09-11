@@ -39,6 +39,19 @@ class DialogController {
                     .or([{ author: userMyId }, { partner: userMyId }])
                     .populate(['author', 'partner', 'lastMessage'])
 
+                dialogs = dialogs.map(dialog => {
+                    let userTo
+                    if (userMyId.toString() === dialog.author._id.toString()) userTo = { ...dialog.partner }
+                    if (userMyId.toString() === dialog.partner._id.toString()) userTo = { ...dialog.author }
+
+                    delete dialog.author
+                    delete dialog.partner
+
+                    dialog.userTo = userTo
+
+                    return dialog
+                })
+
                 res.json(dialogs)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })

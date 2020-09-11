@@ -7,7 +7,7 @@ const Messages = ({ isLoader, messages, userMy, userTo }) => {
 
     return (
         <div id="messages" className="Dialog__messages">
-            {isLoader
+            {isLoader 
             ? <Loader />
             : messages.length
             ? messages.map((message, index) => {
@@ -21,7 +21,7 @@ const Messages = ({ isLoader, messages, userMy, userTo }) => {
                         avatarUrl={avatarUrl}
                         isMe={isMe}
                         isRead={message.isRead}
-                        time={getFormatedTime(new Date())}
+                        time={getFormatedTime(message.createdAt)}
                     />
                 )
             })
