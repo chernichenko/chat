@@ -20,6 +20,10 @@ const Dialog = () => {
   const [dialog, setDialog] = useState({})
   const [messages, setMessages] = useState([])
 
+  // For socket 
+  const [refreshNewMessage, setRefreshNewMessage] = useState(0)
+  const [newMessageState, setNewMessageState] = useState()
+
   useEffect(() => {
     const getInfo = async () => {
       try {
@@ -36,7 +40,7 @@ const Dialog = () => {
         setDialog(dialogResponse)
         setMessages(messagesResponse)
         setIsLoader(false)
-        scrollMessages()
+        setTimeout(() => scrollMessages(), 1000)
       } catch (e) {
         message(e.message)
       }
@@ -46,19 +50,23 @@ const Dialog = () => {
   }, [userToId]) // eslint-disable-line
 
   useEffect(() => {
-    // socket.on('MESSAGE:NEW', data => {
-    //   // Check if this my dialog.
-    //   // Add message to state
-
-    //   // setMessages(prevMessages => {
-    //   //   return {
-    //   //     ...prevMessages,
-    //   //     newMessage
-    //   //   }
-    //   // })
-    //   // scrollMessages()
-    // })
+    socket.on('MESSAGE:NEW', data => {
+      setNewMessageState(data)
+      setRefreshNewMessage(prevState => prevState + 1)
+    })
   }, []) // eslint-disable-line
+
+  useEffect(() => {
+    if (refreshNewMessage) {
+      setMessages(prevMessages => {
+        return [
+          ...prevMessages,
+          newMessageState.message
+        ]
+      })
+      setTimeout(() => scrollMessages(), 1000)
+    }
+  }, [refreshNewMessage]) // eslint-disable-line
 
   const scrollMessages = () => {
     const messagesWrap = document.getElementById('messages')

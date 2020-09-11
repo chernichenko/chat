@@ -16,8 +16,11 @@ const Sidebar = () => {
   const [initialDialogs, setInitialDialogs] = useState()
 
   // For socket 
-  const [refresh, setRefresh] = useState(0)
-  const [changedUserState, setChangedUserState] = useState()
+  const [refreshStatus, setRefreshStatus] = useState(0)
+  const [newStatusState, setNewStatusState] = useState()
+
+  const [refreshLastMessage, setRefreshLastMessage] = useState(0)
+  const [newLastMessageState, setNewLastMessageState] = useState()
 
   useEffect(() => {
     const getUsers = async () => {
@@ -31,38 +34,51 @@ const Sidebar = () => {
         message(e.message)
       }
     }
-
     getUsers()
-  }, []) // eslint-disable-line
 
-  useEffect(() => {
     socket.on('USER:UPDATE_STATUS', data => {
-      setChangedUserState(data)
-      setRefresh(prevState => prevState + 1)
+      setNewStatusState(data)
+      setRefreshStatus(prevState => prevState + 1)
     }) // eslint-disable-line
-    
-    // socket.on('MESSAGE:NEW', data => {
-    //   // refresh dialogs 
-    // })
+
+    socket.on('MESSAGE:NEW', data => {
+      setNewLastMessageState(data)
+      setRefreshLastMessage(prevState => prevState + 1)
+    })
   }, []) // eslint-disable-line
 
   useEffect(() => {
-    if (refresh) {
+    if (refreshStatus) {
       const newDialogs = dialogs.map(dialog => {
-        if (dialog._id.toString() === changedUserState.id.toString()) {
-          return { 
-            ...dialog, 
-            userTo: { 
-              ...dialog.userTo, 
-              isOnline: changedUserState.isOnline 
-            } 
+        if (dialog._id.toString() === newStatusState.id.toString()) {
+          return {
+            ...dialog,
+            userTo: {
+              ...dialog.userTo,
+              isOnline: newStatusState.isOnline
+            }
           }
         }
         return dialog
       })
       setDialogs(newDialogs)
     }
-  }, [refresh]) // eslint-disable-line
+  }, [refreshStatus]) // eslint-disable-line
+
+  useEffect(() => {
+    if (refreshLastMessage) {
+      const newDialogs = dialogs.map(dialog => {
+        if (dialog._id.toString() === newLastMessageState.dialogId.toString()) {
+          return {
+            ...dialog,
+            lastMessage: newLastMessageState.message
+          }
+        }
+        return dialog
+      })
+      setDialogs(newDialogs)
+    }
+  }, [refreshLastMessage]) // eslint-disable-line
 
   return (
     <div className="Sidebar">
@@ -81,7 +97,7 @@ const Sidebar = () => {
               id={item.userTo._id}
               avatar={item.userTo.avatarUrl}
               isOnline={item.userTo.isOnline}
-              name={item.userTo.name} 
+              name={item.userTo.name}
               lastMessage={item.lastMessage.text}
               time={getFormatedTime(item.lastMessage.createdAt)}
               isMe={user._id.toString() === item.lastMessage.user._id.toString()}
