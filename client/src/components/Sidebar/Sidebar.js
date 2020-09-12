@@ -26,7 +26,6 @@ const Sidebar = () => {
     const getUsers = async () => {
       try {
         const dialogItemsResponse = await request(`/api/dialogs/sidebar`, 'GET', null, headers)
-        console.log(dialogItemsResponse)
 
         setDialogs(dialogItemsResponse)
         setInitialDialogs(dialogItemsResponse)
@@ -101,7 +100,7 @@ const Sidebar = () => {
               lastMessage={item.lastMessage ? item.lastMessage.text : ''}
               time={item.lastMessage ? getFormatedTime(new Date(item.lastMessage.createdAt)) : ''}
               isMe={item.lastMessage ? user.id.toString() === item.lastMessage.user.toString() : ''}
-              isRead={false}
+              isRead={item.lastMessage ? item.lastMessage.isRead : false}
               newMessagesCount={0}
             />
           )

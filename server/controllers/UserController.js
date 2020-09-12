@@ -50,11 +50,20 @@ class UserController {
          const user = new User({ name, email, password: hashedPassword, avatarUrl })
          await user.save() 
          await transporter.sendMail(regEmail(email)) 
+
+          // Created dialogs with other users
+         // let users = await User.find()
+         // users = users.filter(user => user._id.toString() !== userMyId.toString())
+
+         // users.forEach(async userTo => {
+         //    const dialog = new Dialog({ author: user._id, partner: userTo._id })
+         //    await dialog.save() 
+         // })
    
          res.status(201).json({ message: 'Пользователь создан' })
 
       } catch (error) {
-         res.status(500).json({ message: '123124' })
+         res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
       }
    }
 

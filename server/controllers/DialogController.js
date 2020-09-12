@@ -33,7 +33,7 @@ class DialogController {
     getDialogsToSidebar = async (req, res) => {
         try {
             if (req.user) {
-                const userMyId = req.user.userId 
+                const userMyId = req.user.userId  
                 
                 let dialogs = await Dialog.find()
                     .or([{ author: userMyId }, { partner: userMyId }])

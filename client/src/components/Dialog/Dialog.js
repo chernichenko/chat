@@ -34,7 +34,7 @@ const Dialog = () => {
 
         const dialogResponse = await request(`/api/dialog/`, 'GET', { userToId }, headers)
 
-        if (dialogResponse.lastMessage) messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogResponse._id }, headers)
+        if (dialogResponse.lastMessage) messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogResponse._id, userToId: userToId }, headers)
 
         setUserTo(userToResponse)
         setDialog(dialogResponse)
@@ -58,6 +58,8 @@ const Dialog = () => {
 
   useEffect(() => {
     if (refreshNewMessage) {
+      console.log('userMy', userMy.id)
+      console.log('newMessage', newMessageState.message)
       setMessages(prevMessages => {
         return [
           ...prevMessages,

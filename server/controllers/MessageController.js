@@ -9,8 +9,17 @@ class MessageController {
     getMessages = async (req, res) => {
         try {
             if (req.user) {
-                const { dialogId } = req.query
-                let messages = await Message.find({ dialog: dialogId })
+                const { dialogId, userToId } = req.query
+
+                await Message.update(
+                    {"dialog": dialogId, "user": userToId, "isRead": false }, 
+                    {"$set":{"isRead": true}}, 
+                    {"multi": true}, 
+                    (err, writeResult) => {}
+                )
+
+                let messages = await Message
+                    .find({ dialog: dialogId })
 
                 messages.sort((a, b) => {
                     if (a.createdAt.getTime() > b.createdAt.getTime()) return false
@@ -31,7 +40,7 @@ class MessageController {
             if (req.user) {
                 const { text, dialog } = req.body
 
-                const message = new Message({ text, dialog, user: req.user.userId })
+                const message = new Message({ text, dialog, user: req.user.userId, isRead: false })
 
                 const dialogFromDB = await Dialog.findOne({ _id: dialog })
                 dialogFromDB.lastMessage = message._id
@@ -41,6 +50,18 @@ class MessageController {
 
                 this.io.emit('MESSAGE:NEW', { dialogId: dialog, message: message })
                 res.json(message)
+            } else {
+                res.status(401).json({ message: 'Не зарегистрирован' })
+            }
+        } catch (e) {
+            res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
+        }
+    }
+
+    setIsReadStatus = async (req, res) => {
+        try {
+            if (req.user) {
+                
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })
             }
