@@ -6,7 +6,7 @@ import { DialogItem, Search } from 'components'
 import { getFormatedTime } from 'utils/date'
 import socket from 'core/socket'
 
-const Sidebar = () => {
+const Sidebar = ({ dialogId }) => {
   const { request } = useHttp()
   const message = useMessage()
   const user = useSelector(state => state.user)
@@ -65,6 +65,8 @@ const Sidebar = () => {
   }, [refreshStatus]) // eslint-disable-line
 
   useEffect(() => {
+    // useParams заношу в редакс. беру його звідти. Якщо відкритий діалог той, що прийшов з сокета, то смс ставлю як прочитану
+    // якщо ні, то додаю каунт +1 для цієї смс
     if (refreshLastMessage) {
       const newDialogs = dialogs.map(dialog => {
         if (dialog._id.toString() === newLastMessageState.dialogId.toString()) {

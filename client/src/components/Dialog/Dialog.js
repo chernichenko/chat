@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { useHttp, useMessage } from 'hooks'
 import socket from 'core/socket'
 
-const Dialog = () => {
+const Dialog = ({ setDialogId }) => {
   const { request } = useHttp()
   const message = useMessage()
 
@@ -24,6 +24,9 @@ const Dialog = () => {
   const [refreshNewMessage, setRefreshNewMessage] = useState(0)
   const [newMessageState, setNewMessageState] = useState()
 
+  const [refreshMessageIsRead, setRefreshMessageIsRead] = useState(0)
+  const [newMessageIsReadState, setNewMessageIsReadState] = useState()
+
   useEffect(() => {
     const getInfo = async () => {
       try {
@@ -36,6 +39,7 @@ const Dialog = () => {
 
         if (dialogResponse.lastMessage) messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogResponse._id, userToId: userToId }, headers)
 
+        setDialogId(dialogResponse._id)
         setUserTo(userToResponse)
         setDialog(dialogResponse)
         setMessages(messagesResponse)
@@ -54,21 +58,43 @@ const Dialog = () => {
       setNewMessageState(data)
       setRefreshNewMessage(prevState => prevState + 1)
     })
+
+    socket.on('MESSAGE:UPDATE_IS_READ', data => {
+      setNewMessageIsReadState(data)
+      setRefreshMessageIsRead(prevState => prevState + 1)
+    })
   }, []) // eslint-disable-line
 
   useEffect(() => {
     if (refreshNewMessage) {
-      console.log('userMy', userMy.id)
-      console.log('newMessage', newMessageState.message)
-      setMessages(prevMessages => {
-        return [
-          ...prevMessages,
-          newMessageState.message
-        ]
-      })
-      scrollMessages()
+      const { dialogId, message } = newMessageState
+      
+      if (dialogId.toString() === dialog._id.toString()) {
+        if (message.user.toString() !== userMy.id.toString()) {
+          socket.emit('MESSAGE:UPDATE_IS_READ', { dialogId: dialog._id, message: message })
+        }
+        setMessages(prevMessages => [ ...prevMessages, message ])
+        scrollMessages()
+      }
     }
   }, [refreshNewMessage]) // eslint-disable-line
+
+  useEffect(() => {
+    if (refreshMessageIsRead) {
+      const { dialogId, message } = newMessageIsReadState
+      
+      if (dialogId.toString() === dialog._id.toString()) {
+        if (message.user.toString() === userMy.id.toString()) {
+          setTimeout(() => {
+            setMessages(prevMessages => prevMessages.map(item => {
+              if (item._id.toString() === message._id.toString()) return { ...item, isRead: true }
+              return item
+            }))
+          }, 1000)
+        }
+      }
+    }
+  }, [refreshMessageIsRead]) // eslint-disable-line
 
   useEffect(() => {
     scrollMessages()
