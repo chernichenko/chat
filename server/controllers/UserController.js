@@ -3,6 +3,7 @@ const {validationResult} = require('express-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const Dialog = require('../models/Dialog')
 const regEmail = require('../emails/registraion')
 const resetEmail = require('../emails/reset')
 const crypto = require('crypto')
@@ -48,17 +49,18 @@ class UserController {
          if (req.files) avatarUrl = saveFile(req.files.file, 'images') 
 
          const user = new User({ name, email, password: hashedPassword, avatarUrl })
-         await user.save() 
-         await transporter.sendMail(regEmail(email)) 
 
           // Created dialogs with other users
-         // let users = await User.find()
-         // users = users.filter(user => user._id.toString() !== userMyId.toString())
+         let users = await User.find()
+         if (users.length) {
+            users.forEach(async userTo => {
+               const dialog = new Dialog({ author: user._id, partner: userTo._id })
+               await dialog.save() 
+            })
+         }
 
-         // users.forEach(async userTo => {
-         //    const dialog = new Dialog({ author: user._id, partner: userTo._id })
-         //    await dialog.save() 
-         // })
+         await user.save() 
+         await transporter.sendMail(regEmail(email)) 
    
          res.status(201).json({ message: 'Пользователь создан' })
 

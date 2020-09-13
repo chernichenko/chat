@@ -16,11 +16,6 @@ class DialogController {
                 let dialog = await Dialog.findOne()
                     .or([{ author: ID1, partner: ID2 }, { author: ID2, partner: ID1 }])
 
-                if (!dialog) {
-                    dialog = new Dialog({ author: ID1, partner: ID2 })
-                    await dialog.save() 
-                }
-
                 res.json(dialog)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })
