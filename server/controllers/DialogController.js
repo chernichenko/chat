@@ -16,8 +16,17 @@ class DialogController {
                 let dialog = await Dialog.findOne()
                     .or([{ author: ID1, partner: ID2 }, { author: ID2, partner: ID1 }])
 
-                // нахожу всі смс цього діалогу ( не мої ) і роблю їх прочитаними і відправляю сокет
+                const messages = await Message
+                    .find({ "dialog": dialog._id, "user": ID2, "isRead": false })
+                const messagesIds = messages.map(message => message._id.toString()) 
 
+                await Message.update(
+                    { "dialog": dialog._id, "user": ID2, "isRead": false },
+                    { "$set": { "isRead": true } },
+                    { "multi": true }
+                )
+
+                this.io.emit('MESSAGE:UPDATE_IS_READ', { dialogId: dialog._id, messagesIds, messageUserId: ID2 })
                 res.json(dialog)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })

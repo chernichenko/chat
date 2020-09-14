@@ -66,7 +66,7 @@ class MessageController {
                     { "_id": messageId },
                     { "$set": { "isRead": true } }
                 )
-                this.io.emit('MESSAGE:UPDATE_IS_READ', { dialogId, messageId, messageUserId })
+                this.io.emit('MESSAGE:UPDATE_IS_READ', { dialogId, messagesIds: [messageId], messageUserId })
                 res.json({ message: 'Статус изменен' })
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })

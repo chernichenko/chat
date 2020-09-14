@@ -87,13 +87,12 @@ const Dialog = ({ setDialogId }) => {
 
   useEffect(() => {
     const updateIsReadState = () => {
-      const { dialogId, messageId, messageUserId } = newMessageIsReadState
-      
+      const { dialogId, messagesIds, messageUserId } = newMessageIsReadState
       if (dialogId.toString() === dialog._id.toString()) {
         if (messageUserId.toString() === userMy.id.toString()) {
           setTimeout(() => {
             setMessages(prevMessages => prevMessages.map(item => {
-              if (item._id.toString() === messageId.toString()) return { ...item, isRead: true }
+              if (messagesIds.some(messageId => messageId === item._id.toString())) return { ...item, isRead: true }
               return item
             }))
           }, 1000)
@@ -101,7 +100,7 @@ const Dialog = ({ setDialogId }) => {
       }
     }
 
-    if (refreshMessageIsRead) updateIsReadState()
+    if (refreshMessageIsRead && Boolean(newMessageIsReadState.messagesIds.length)) updateIsReadState()
   }, [refreshMessageIsRead]) // eslint-disable-line
 
   // Scroll dialog window 
