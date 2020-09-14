@@ -9,13 +9,13 @@ const createSocket = server => {
           io.emit('USER:UPDATE_STATUS', { id: data.id, isOnline: false })
         })
 
-        client.on('MESSAGE:UPDATE_IS_READ', async data => {
-          await Message.update(
-            {"_id": data.message._id }, 
-            {"$set":{"isRead": true}}
-          ) 
-          io.emit('MESSAGE:UPDATE_IS_READ', data)
-        })
+        // client.on('MESSAGE:UPDATE_IS_READ', async data => {
+        //   await Message.update(
+        //     {"_id": data.message._id }, 
+        //     {"$set":{"isRead": true}}
+        //   ) 
+        //   io.emit('MESSAGE:UPDATE_IS_READ', data)
+        // })
     })
 
     return io

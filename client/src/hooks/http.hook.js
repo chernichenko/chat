@@ -14,7 +14,7 @@ const useHttp = () => {
          url,
          headers
       }
-      if (method === 'GET') request['params'] = data
+      if (method === 'GET' || method === 'PUT') request['params'] = data
       if (method === 'POST') request['data'] = data
        
       try {

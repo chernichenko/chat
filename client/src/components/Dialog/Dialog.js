@@ -66,34 +66,41 @@ const Dialog = ({ setDialogId }) => {
   }, []) // eslint-disable-line
 
   useEffect(() => {
-    if (refreshNewMessage) {
+    const addMessage = async () => {
       const { dialogId, message } = newMessageState
       
       if (dialogId.toString() === dialog._id.toString()) {
         if (message.user.toString() !== userMy.id.toString()) {
-          socket.emit('MESSAGE:UPDATE_IS_READ', { dialogId: dialog._id, message: message })
+          try {
+            await request(`/api/message/update`, 'PUT', 
+            { dialogId: dialog._id, messageId: message._id, messageUserId: message.user }, headers)
+          } catch (e) { console.log(e.message) }
         }
         setMessages(prevMessages => [ ...prevMessages, message ])
         scrollMessages()
       }
     }
+
+    if (refreshNewMessage) addMessage()
   }, [refreshNewMessage]) // eslint-disable-line
 
   useEffect(() => {
-    if (refreshMessageIsRead) {
-      const { dialogId, message } = newMessageIsReadState
+    const updateIsReadState = () => {
+      const { dialogId, messageId, messageUserId } = newMessageIsReadState
       
       if (dialogId.toString() === dialog._id.toString()) {
-        if (message.user.toString() === userMy.id.toString()) {
+        if (messageUserId.toString() === userMy.id.toString()) {
           setTimeout(() => {
             setMessages(prevMessages => prevMessages.map(item => {
-              if (item._id.toString() === message._id.toString()) return { ...item, isRead: true }
+              if (item._id.toString() === messageId.toString()) return { ...item, isRead: true }
               return item
             }))
           }, 1000)
         }
       }
     }
+
+    if (refreshMessageIsRead) updateIsReadState()
   }, [refreshMessageIsRead]) // eslint-disable-line
 
   useEffect(() => {

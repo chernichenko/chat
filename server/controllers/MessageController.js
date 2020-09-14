@@ -12,10 +12,10 @@ class MessageController {
                 const { dialogId, userToId } = req.query
 
                 await Message.update(
-                    {"dialog": dialogId, "user": userToId, "isRead": false }, 
-                    {"$set":{"isRead": true}}, 
-                    {"multi": true}, 
-                    (err, writeResult) => {}
+                    { "dialog": dialogId, "user": userToId, "isRead": false },
+                    { "$set": { "isRead": true } },
+                    { "multi": true },
+                    (err, writeResult) => { }
                 )
 
                 let messages = await Message
@@ -46,7 +46,7 @@ class MessageController {
                 dialogFromDB.lastMessage = message._id
 
                 await dialogFromDB.save()
-                await message.save() 
+                await message.save()
 
                 this.io.emit('MESSAGE:NEW', { dialogId: dialog, message: message })
                 res.json(message)
@@ -61,7 +61,13 @@ class MessageController {
     setIsReadStatus = async (req, res) => {
         try {
             if (req.user) {
-                
+                const { dialogId, messageId, messageUserId } = req.query
+                await Message.update(
+                    { "_id": messageId },
+                    { "$set": { "isRead": true } }
+                )
+                this.io.emit('MESSAGE:UPDATE_IS_READ', { dialogId, messageId, messageUserId })
+                res.json({ message: 'Статус изменен' })
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })
             }

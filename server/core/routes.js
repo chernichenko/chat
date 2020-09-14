@@ -38,6 +38,7 @@ const createRoutes = (app, io) => {
    
    app.get('/api/messages', auth, MessageController.getMessages)
    app.post('/api/message', auth, MessageController.sendMessage)
+   app.put('/api/message/update', auth, MessageController.setIsReadStatus)
    
 }
 
