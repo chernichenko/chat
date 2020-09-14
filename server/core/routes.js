@@ -26,6 +26,7 @@ const createRoutes = (app, io) => {
    // Routes 
    app.post('/api/auth/register', checkRegisterInputs, UserController.register)
    app.post('/api/auth/login', checkLoginInputs, UserController.login)
+   app.post('/api/auth/logout', auth, UserController.logout)
    app.post('/api/auth/reset', UserController.reset)
    app.post('/api/auth/reset/finished', checkRegisterInputs, UserController.resetFinished)
 

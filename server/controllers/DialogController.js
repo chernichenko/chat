@@ -16,6 +16,8 @@ class DialogController {
                 let dialog = await Dialog.findOne()
                     .or([{ author: ID1, partner: ID2 }, { author: ID2, partner: ID1 }])
 
+                // нахожу всі смс цього діалогу ( не мої ) і роблю їх прочитаними і відправляю сокет
+
                 res.json(dialog)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })

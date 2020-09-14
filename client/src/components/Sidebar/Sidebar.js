@@ -15,13 +15,6 @@ const Sidebar = ({ dialogId }) => {
   const [dialogs, setDialogs] = useState([])
   const [initialDialogs, setInitialDialogs] = useState()
 
-  // For socket 
-  const [refreshStatus, setRefreshStatus] = useState(0)
-  const [newStatusState, setNewStatusState] = useState()
-
-  const [refreshLastMessage, setRefreshLastMessage] = useState(0)
-  const [newLastMessageState, setNewLastMessageState] = useState()
-
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -46,10 +39,14 @@ const Sidebar = ({ dialogId }) => {
     })
   }, []) // eslint-disable-line
 
+  // Socket Refresh Status 
+  const [refreshStatus, setRefreshStatus] = useState(0)
+  const [newStatusState, setNewStatusState] = useState()
+
   useEffect(() => {
     if (refreshStatus) {
       const newDialogs = dialogs.map(dialog => {
-        if (dialog._id.toString() === newStatusState.id.toString()) {
+        if (dialog.userTo._id.toString() === newStatusState.userId.toString()) {
           return {
             ...dialog,
             userTo: {
@@ -63,6 +60,10 @@ const Sidebar = ({ dialogId }) => {
       setDialogs(newDialogs)
     }
   }, [refreshStatus]) // eslint-disable-line
+
+  // Socket Last Message
+  const [refreshLastMessage, setRefreshLastMessage] = useState(0)
+  const [newLastMessageState, setNewLastMessageState] = useState()
 
   useEffect(() => {
     // useParams заношу в редакс. беру його звідти. Якщо відкритий діалог той, що прийшов з сокета, то смс ставлю як прочитану

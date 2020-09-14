@@ -1,18 +1,25 @@
 import './Navbar.scss'
 import React from 'react'
-import {useHistory, NavLink} from 'react-router-dom'
-import { useSelector, useDispatch  } from 'react-redux'
+import { useHistory, NavLink} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { useHttp, useMessage } from 'hooks'
 import Actions from 'redux/actions/user'
 
 const Navbar = () => {
    const history = useHistory()
+   const message = useMessage()
    const dispatch = useDispatch()
-   const userId = useSelector(state => state.user.id)
+   const user = useSelector(state => state.user)
+   const { request } = useHttp()
+   const headers = { auth: `Che ${user.token}` }
 
-   const logoutHandler = (e) => {
-      e.preventDefault()
-      dispatch(Actions.logout({ id: userId }))
-      history.push('/')
+   const logoutHandler = async e => {
+      try {
+         e.preventDefault()
+         await request(`/api/auth/logout`, 'POST', null, headers)
+         dispatch(Actions.logout({ userId: user.id })) 
+         history.push('/')
+      } catch (e) { message(e.message) }
    }
 
    return(

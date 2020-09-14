@@ -20,13 +20,6 @@ const Dialog = ({ setDialogId }) => {
   const [dialog, setDialog] = useState({})
   const [messages, setMessages] = useState([])
 
-  // For socket 
-  const [refreshNewMessage, setRefreshNewMessage] = useState(0)
-  const [newMessageState, setNewMessageState] = useState()
-
-  const [refreshMessageIsRead, setRefreshMessageIsRead] = useState(0)
-  const [newMessageIsReadState, setNewMessageIsReadState] = useState()
-
   useEffect(() => {
     const getInfo = async () => {
       try {
@@ -65,6 +58,10 @@ const Dialog = ({ setDialogId }) => {
     })
   }, []) // eslint-disable-line
 
+  // Socket New Message 
+  const [refreshNewMessage, setRefreshNewMessage] = useState(0)
+  const [newMessageState, setNewMessageState] = useState()
+
   useEffect(() => {
     const addMessage = async () => {
       const { dialogId, message } = newMessageState
@@ -83,6 +80,10 @@ const Dialog = ({ setDialogId }) => {
 
     if (refreshNewMessage) addMessage()
   }, [refreshNewMessage]) // eslint-disable-line
+
+  // Socket Update Status isRead 
+  const [refreshMessageIsRead, setRefreshMessageIsRead] = useState(0)
+  const [newMessageIsReadState, setNewMessageIsReadState] = useState()
 
   useEffect(() => {
     const updateIsReadState = () => {
@@ -103,6 +104,7 @@ const Dialog = ({ setDialogId }) => {
     if (refreshMessageIsRead) updateIsReadState()
   }, [refreshMessageIsRead]) // eslint-disable-line
 
+  // Scroll dialog window 
   useEffect(() => {
     scrollMessages()
   }, [messages])

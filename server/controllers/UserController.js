@@ -101,10 +101,23 @@ class UserController {
             { expiresIn: '24h' }
          ) 
 
-         this.io.emit('USER:UPDATE_STATUS', { id: user.id, isOnline: true })
+         this.io.emit('USER:UPDATE_STATUS', { userId: user.id, isOnline: true })
          const userResponser = { id: user.id, name: user.name, avatarUrl: user.avatarUrl, token }
          res.json(userResponser) 
    
+      } catch (e) {
+         res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
+      } 
+   }
+
+   logout = async (req, res) => {
+      try {
+         if (req.user) {
+            this.io.emit('USER:UPDATE_STATUS', { userId: req.user.userId, isOnline: false })
+            res.json({ message: 'Запрос на изменение статуса отправлен' })
+         } else {
+            res.status(401).json({ message: 'Не зарегистрирован' })
+         }
       } catch (e) {
          res.status(500).json({ message: 'Что то пошло не так, попробуйте снова' })
       }
@@ -163,7 +176,7 @@ class UserController {
             const userId = userToId ? userToId : req.user.userId
             const user = await User.findOne({ _id: userId })
 
-            this.io.emit('USER:UPDATE_STATUS', { id: userId, isOnline: true })
+            this.io.emit('USER:UPDATE_STATUS', { userId, isOnline: true })
             res.json(user)
          } else {
             res.status(401).json({ message: 'Не зарегистрирован' })

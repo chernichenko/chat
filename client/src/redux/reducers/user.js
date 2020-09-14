@@ -1,6 +1,5 @@
 import { LOGIN, LOGOUT, SET_USER } from 'redux/actionTypes'
 import { STORAGE_NAME } from 'utils/constants'
-import socket from 'core/socket'
 
 const initialState = {
    name: null,
@@ -17,7 +16,6 @@ const userReducer = (state = initialState, { type, payload }) => {
          }))
          return { ...payload }
       case LOGOUT:
-         socket.emit('USER:UPDATE_STATUS', { id: payload.id })
          localStorage.removeItem(STORAGE_NAME)
          return {
             isAuth: false,
