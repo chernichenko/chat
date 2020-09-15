@@ -47,8 +47,12 @@ class MessageController {
 
                 await dialogFromDB.save()
                 await message.save()
+                
+                const messagesNotRead = await Message.find({ dialog, isRead: false })
+                console.log(messagesNotRead)
+                const newMessagesCount = messagesNotRead.length
 
-                this.io.emit('MESSAGE:NEW', { dialogId: dialog, message: message })
+                this.io.emit('MESSAGE:NEW', { dialogId: dialog, message: message, newMessagesCount })
                 res.json(message)
             } else {
                 res.status(401).json({ message: 'Не зарегистрирован' })

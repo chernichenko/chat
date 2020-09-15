@@ -47,6 +47,11 @@ const Dialog = ({ setDialogId }) => {
   }, [userToId]) // eslint-disable-line
 
   useEffect(() => {
+    socket.on('USER:UPDATE_STATUS', data => {
+      setNewStatusState(data)
+      setRefreshStatus(prevState => prevState + 1)
+    })
+
     socket.on('MESSAGE:NEW', data => {
       setNewMessageState(data)
       setRefreshNewMessage(prevState => prevState + 1)
@@ -57,6 +62,23 @@ const Dialog = ({ setDialogId }) => {
       setRefreshMessageIsRead(prevState => prevState + 1)
     })
   }, []) // eslint-disable-line
+
+  // Socket Refresh Status 
+  const [refreshStatus, setRefreshStatus] = useState(0)
+  const [newStatusState, setNewStatusState] = useState()
+
+  useEffect(() => {
+    if (refreshStatus) {
+      if (newStatusState.userId.toString() === userTo._id.toString()) {
+        setUserTo(prevUser => {
+          return {
+            ...prevUser,
+            isOnline: newStatusState.isOnline
+          }
+        })
+      } 
+    }
+  }, [refreshStatus]) // eslint-disable-line
 
   // Socket New Message 
   const [refreshNewMessage, setRefreshNewMessage] = useState(0)

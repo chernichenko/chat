@@ -31,11 +31,16 @@ const Sidebar = ({ dialogId }) => {
     socket.on('USER:UPDATE_STATUS', data => {
       setNewStatusState(data)
       setRefreshStatus(prevState => prevState + 1)
-    }) // eslint-disable-line
+    })
 
     socket.on('MESSAGE:NEW', data => {
       setNewLastMessageState(data)
       setRefreshLastMessage(prevState => prevState + 1)
+    })
+
+    socket.on('MESSAGE:UPDATE_IS_READ', data => {
+      setNewMessageIsReadState(data)
+      setRefreshMessageIsRead(prevState => prevState + 1)
     })
   }, []) // eslint-disable-line
 
@@ -66,21 +71,45 @@ const Sidebar = ({ dialogId }) => {
   const [newLastMessageState, setNewLastMessageState] = useState()
 
   useEffect(() => {
-    // useParams заношу в редакс. беру його звідти. Якщо відкритий діалог той, що прийшов з сокета, то смс ставлю як прочитану
-    // якщо ні, то додаю каунт +1 для цієї смс
     if (refreshLastMessage) {
       const newDialogs = dialogs.map(dialog => {
         if (dialog._id.toString() === newLastMessageState.dialogId.toString()) {
-          return {
-            ...dialog,
-            lastMessage: newLastMessageState.message
-          }
+          return { ...dialog, lastMessage: newLastMessageState.message, newMessagesCount: newLastMessageState.newMessagesCount }
         }
         return dialog
       })
       setDialogs(newDialogs)
     }
   }, [refreshLastMessage]) // eslint-disable-line
+
+  // Socket Status isRead 
+  const [refreshMessageIsRead, setRefreshMessageIsRead] = useState(0)
+  const [newMessageIsReadState, setNewMessageIsReadState] = useState()
+
+  useEffect(() => {
+    const updateIsReadState = () => {
+      const { dialogId, messagesIds, messageUserId } = newMessageIsReadState
+
+      const newDialogs = dialigs.map(dialog => {
+        if (dialog._id.toString() === dialogId && messageUserId.toString() === user.id.toString()) {
+          if (messagesIds.some(messageId => messageId === dialog.lastMessage._id.toString())) {
+            return {
+              ...dialog,
+              lastMessage: {
+                ...dialog.lastMessage,
+                newMessagesCount: 0,
+                isRead: true
+              }
+            }
+          }
+        }
+        return dialog
+      })
+      setTimeout(() => { setDialogs(newDialogs) }, 1000)
+    }
+
+    if (refreshMessageIsRead && Boolean(newMessageIsReadState.messagesIds.length)) updateIsReadState()
+  }, [refreshMessageIsRead]) // eslint-disable-line
 
   return (
     <div className="Sidebar">
@@ -95,8 +124,8 @@ const Sidebar = ({ dialogId }) => {
         {dialogs && dialogs.map((item, key) => {
           return (
             <DialogItem
-              key={item.userTo._id + key}
-              id={item.userTo._id}
+              key={item._id + key}
+              userToId={item.userTo._id}
               avatar={item.userTo.avatarUrl}
               isOnline={item.userTo.isOnline}
               name={item.userTo.name}
@@ -104,7 +133,7 @@ const Sidebar = ({ dialogId }) => {
               time={item.lastMessage ? getFormatedTime(new Date(item.lastMessage.createdAt)) : ''}
               isMe={item.lastMessage ? user.id.toString() === item.lastMessage.user.toString() : ''}
               isRead={item.lastMessage ? item.lastMessage.isRead : false}
-              newMessagesCount={0}
+              newMessagesCount={item.newMessagesCount ? item.newMessagesCount : 0}
             />
           )
         })}

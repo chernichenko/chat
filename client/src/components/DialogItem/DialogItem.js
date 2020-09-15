@@ -6,7 +6,7 @@ import noCheck from 'assets/icons/no-check.svg'
 import { NavLink } from "react-router-dom"
 
 const DialogItem = ({
-  id,
+  userToId,
   avatar,
   isOnline,
   name,
@@ -20,7 +20,7 @@ const DialogItem = ({
   const { color, colorLighten } = generateGradient(id)
 
   return (
-    <NavLink to={`/${id}`}>
+    <NavLink to={`/${userToId}`}>
       <div className="DialogItem">
         <div className="DialogItem__column1">
           <div className="DialogItem__avatar-wrap">
@@ -47,7 +47,9 @@ const DialogItem = ({
           ? <div className="DialogItem__message-status">
             <img src={isRead ? check : noCheck} alt="" />
           </div>
-          : <div className="DialogItem__message-count">1</div>}
+          : Boolean(newMessagesCount) 
+          ? <div className="DialogItem__message-count">newMessagesCount</div>
+          : <></>}
         </div>}
       </div>
     </NavLink>
