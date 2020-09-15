@@ -74,7 +74,11 @@ const Sidebar = ({ dialogId }) => {
     if (refreshLastMessage) {
       const newDialogs = dialogs.map(dialog => {
         if (dialog._id.toString() === newLastMessageState.dialogId.toString()) {
-          return { ...dialog, lastMessage: newLastMessageState.message, newMessagesCount: newLastMessageState.newMessagesCount }
+          let newMessagesCount 
+          user.id.toString() === newLastMessageState.message.user.toString() 
+            ? newMessagesCount = 0
+            : newMessagesCount = newLastMessageState.newMessagesCount 
+          return { ...dialog, lastMessage: newLastMessageState.message, newMessagesCount }
         }
         return dialog
       })
@@ -88,16 +92,16 @@ const Sidebar = ({ dialogId }) => {
 
   useEffect(() => {
     const updateIsReadState = () => {
-      const { dialogId, messagesIds, messageUserId } = newMessageIsReadState
+      const { dialogId, messagesIds } = newMessageIsReadState
 
-      const newDialogs = dialigs.map(dialog => {
-        if (dialog._id.toString() === dialogId && messageUserId.toString() === user.id.toString()) {
+      const newDialogs = dialogs.map(dialog => {
+        if (dialog._id.toString() === dialogId.toString()) {
           if (messagesIds.some(messageId => messageId === dialog.lastMessage._id.toString())) {
             return {
               ...dialog,
+              newMessagesCount: 0,
               lastMessage: {
                 ...dialog.lastMessage,
-                newMessagesCount: 0,
                 isRead: true
               }
             }
@@ -131,7 +135,7 @@ const Sidebar = ({ dialogId }) => {
               name={item.userTo.name}
               lastMessage={item.lastMessage ? item.lastMessage.text : ''}
               time={item.lastMessage ? getFormatedTime(new Date(item.lastMessage.createdAt)) : ''}
-              isMe={item.lastMessage ? user.id.toString() === item.lastMessage.user.toString() : ''}
+              isMe={''}
               isRead={item.lastMessage ? item.lastMessage.isRead : false}
               newMessagesCount={item.newMessagesCount ? item.newMessagesCount : 0}
             />

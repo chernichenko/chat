@@ -49,7 +49,6 @@ class MessageController {
                 await message.save()
                 
                 const messagesNotRead = await Message.find({ dialog, isRead: false })
-                console.log(messagesNotRead)
                 const newMessagesCount = messagesNotRead.length
 
                 this.io.emit('MESSAGE:NEW', { dialogId: dialog, message: message, newMessagesCount })

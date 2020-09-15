@@ -17,7 +17,7 @@ const DialogItem = ({
   newMessagesCount
 }) => {
 
-  const { color, colorLighten } = generateGradient(id)
+  const { color, colorLighten } = generateGradient(userToId)
 
   return (
     <NavLink to={`/${userToId}`}>
@@ -48,7 +48,7 @@ const DialogItem = ({
             <img src={isRead ? check : noCheck} alt="" />
           </div>
           : Boolean(newMessagesCount) 
-          ? <div className="DialogItem__message-count">newMessagesCount</div>
+          ? <div className="DialogItem__message-count">{newMessagesCount}</div>
           : <></>}
         </div>}
       </div>

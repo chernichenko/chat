@@ -31,9 +31,7 @@ const Profile = ({ history }) => {
       const data = await request('/api/profile', 'POST', formData, { auth: `Che ${user.token}` })
       dispatch(Actions.setUser({
         name: form.name,
-        avatarUrl: data.avatarUrl,
-        isAuth: true,
-        token: user.token
+        avatarUrl: data.avatarUrl
       }))
       history.push(`/`)
       message(data.message)

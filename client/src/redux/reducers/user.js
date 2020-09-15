@@ -22,7 +22,7 @@ const userReducer = (state = initialState, { type, payload }) => {
             token: null
          }
       case SET_USER:
-         return { ...payload }
+         return { ...state, ...payload }
       default:
          return state
    }

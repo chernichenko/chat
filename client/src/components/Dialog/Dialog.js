@@ -69,7 +69,7 @@ const Dialog = ({ setDialogId }) => {
 
   useEffect(() => {
     if (refreshStatus) {
-      if (newStatusState.userId.toString() === userTo._id.toString()) {
+      if (newStatusState.userId.toString() === userToId.toString()) {
         setUserTo(prevUser => {
           return {
             ...prevUser,
@@ -112,12 +112,10 @@ const Dialog = ({ setDialogId }) => {
       const { dialogId, messagesIds, messageUserId } = newMessageIsReadState
       if (dialogId.toString() === dialog._id.toString()) {
         if (messageUserId.toString() === userMy.id.toString()) {
-          setTimeout(() => {
-            setMessages(prevMessages => prevMessages.map(item => {
-              if (messagesIds.some(messageId => messageId === item._id.toString())) return { ...item, isRead: true }
-              return item
-            }))
-          }, 1000)
+          setMessages(prevMessages => prevMessages.map(item => {
+            if (messagesIds.some(messageId => messageId === item._id.toString())) return { ...item, isRead: true }
+            return item
+          }))
         }
       }
     }
