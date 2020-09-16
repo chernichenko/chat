@@ -67,7 +67,7 @@ const Dialog = () => {
         })
       } 
     }
-  }, [refreshStatus]) // eslint-disable-line
+  }, [newStatusState]) // eslint-disable-line
 
   // Socket New Message 
   const [newMessageState, setNewMessageState] = useState()
@@ -89,7 +89,7 @@ const Dialog = () => {
     }
 
     if (!isFirstLoad) addMessage()
-  }, [refreshNewMessage]) // eslint-disable-line
+  }, [newMessageState]) // eslint-disable-line
 
   // Socket Update Status isRead 
   const [newMessageIsReadState, setNewMessageIsReadState] = useState()
@@ -108,7 +108,7 @@ const Dialog = () => {
     }
 
     if (!isFirstLoad && Boolean(newMessageIsReadState.messagesIds.length)) updateIsReadState()
-  }, [refreshMessageIsRead]) // eslint-disable-line
+  }, [newMessageIsReadState]) // eslint-disable-line
 
   // Scroll dialog window 
   useEffect(() => {

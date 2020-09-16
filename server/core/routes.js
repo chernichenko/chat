@@ -30,15 +30,15 @@ const createRoutes = (app, io) => {
    app.post('/api/auth/reset', UserController.reset)
    app.post('/api/auth/reset/finished', checkRegisterInputs, UserController.resetFinished)
 
-    app.get('/api/user', auth, lastSeen, UserController.getUser)
+   app.get('/api/user', auth, lastSeen, UserController.getUser)
    
    app.post('/api/profile', auth, lastSeen, ProfileController.changeUserInfo)
 
-   app.get('/api/dialog', auth, DialogController.getDialog)
+   app.get('/api/dialog', auth, lastSeen, DialogController.getDialog)
    app.get('/api/dialogs/sidebar', auth, DialogController.getDialogsToSidebar)
    
    app.get('/api/messages', auth, MessageController.getMessages)
-   app.post('/api/message', auth, MessageController.sendMessage)
+   app.post('/api/message', auth, lastSeen, MessageController.sendMessage)
    app.put('/api/message/update', auth, MessageController.setIsReadStatus)
    
 }
