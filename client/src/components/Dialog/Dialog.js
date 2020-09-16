@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { useHttp, useMessage } from 'hooks'
 import socket from 'core/socket'
 
-const Dialog = ({ setDialogId }) => {
+const Dialog = () => {
   const { request } = useHttp()
   const message = useMessage()
 
@@ -19,6 +19,7 @@ const Dialog = ({ setDialogId }) => {
   const [isLoader, setIsLoader] = useState(true)
   const [dialog, setDialog] = useState({})
   const [messages, setMessages] = useState([])
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
 
   useEffect(() => {
     const getInfo = async () => {
@@ -32,12 +33,12 @@ const Dialog = ({ setDialogId }) => {
 
         if (dialogResponse.lastMessage) messagesResponse = await request(`/api/messages/`, 'GET', { dialogId: dialogResponse._id, userToId: userToId }, headers)
 
-        setDialogId(dialogResponse._id)
         setUserTo(userToResponse)
         setDialog(dialogResponse)
         setMessages(messagesResponse)
         setIsLoader(false)
         scrollMessages()
+        setIsFirstLoad(false)
       } catch (e) {
         message(e.message)
       }
@@ -47,28 +48,16 @@ const Dialog = ({ setDialogId }) => {
   }, [userToId]) // eslint-disable-line
 
   useEffect(() => {
-    socket.on('USER:UPDATE_STATUS', data => {
-      setNewStatusState(data)
-      setRefreshStatus(prevState => prevState + 1)
-    })
-
-    socket.on('MESSAGE:NEW', data => {
-      setNewMessageState(data)
-      setRefreshNewMessage(prevState => prevState + 1)
-    })
-
-    socket.on('MESSAGE:UPDATE_IS_READ', data => {
-      setNewMessageIsReadState(data)
-      setRefreshMessageIsRead(prevState => prevState + 1)
-    })
+    socket.on('USER:UPDATE_STATUS', data => setNewStatusState(data))
+    socket.on('MESSAGE:NEW', data => setNewMessageState(data))
+    socket.on('MESSAGE:UPDATE_IS_READ', data => setNewMessageIsReadState(data))
   }, []) // eslint-disable-line
 
   // Socket Refresh Status 
-  const [refreshStatus, setRefreshStatus] = useState(0)
   const [newStatusState, setNewStatusState] = useState()
 
   useEffect(() => {
-    if (refreshStatus) {
+    if (!isFirstLoad) {
       if (newStatusState.userId.toString() === userToId.toString()) {
         setUserTo(prevUser => {
           return {
@@ -81,7 +70,6 @@ const Dialog = ({ setDialogId }) => {
   }, [refreshStatus]) // eslint-disable-line
 
   // Socket New Message 
-  const [refreshNewMessage, setRefreshNewMessage] = useState(0)
   const [newMessageState, setNewMessageState] = useState()
 
   useEffect(() => {
@@ -100,11 +88,10 @@ const Dialog = ({ setDialogId }) => {
       }
     }
 
-    if (refreshNewMessage) addMessage()
+    if (!isFirstLoad) addMessage()
   }, [refreshNewMessage]) // eslint-disable-line
 
   // Socket Update Status isRead 
-  const [refreshMessageIsRead, setRefreshMessageIsRead] = useState(0)
   const [newMessageIsReadState, setNewMessageIsReadState] = useState()
 
   useEffect(() => {
@@ -120,7 +107,7 @@ const Dialog = ({ setDialogId }) => {
       }
     }
 
-    if (refreshMessageIsRead && Boolean(newMessageIsReadState.messagesIds.length)) updateIsReadState()
+    if (!isFirstLoad && Boolean(newMessageIsReadState.messagesIds.length)) updateIsReadState()
   }, [refreshMessageIsRead]) // eslint-disable-line
 
   // Scroll dialog window 

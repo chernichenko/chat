@@ -6,7 +6,7 @@ import { DialogItem, Search } from 'components'
 import { getFormatedTime } from 'utils/date'
 import socket from 'core/socket'
 
-const Sidebar = ({ dialogId }) => {
+const Sidebar = () => {
   const { request } = useHttp()
   const message = useMessage()
   const user = useSelector(state => state.user)
@@ -14,6 +14,7 @@ const Sidebar = ({ dialogId }) => {
 
   const [dialogs, setDialogs] = useState([])
   const [initialDialogs, setInitialDialogs] = useState()
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
 
   useEffect(() => {
     const getUsers = async () => {
@@ -22,34 +23,23 @@ const Sidebar = ({ dialogId }) => {
 
         setDialogs(dialogItemsResponse)
         setInitialDialogs(dialogItemsResponse)
+        setIsFirstLoad(false)
       } catch (e) {
         message(e.message)
       }
     }
     getUsers()
 
-    socket.on('USER:UPDATE_STATUS', data => {
-      setNewStatusState(data)
-      setRefreshStatus(prevState => prevState + 1)
-    })
-
-    socket.on('MESSAGE:NEW', data => {
-      setNewLastMessageState(data)
-      setRefreshLastMessage(prevState => prevState + 1)
-    })
-
-    socket.on('MESSAGE:UPDATE_IS_READ', data => {
-      setNewMessageIsReadState(data)
-      setRefreshMessageIsRead(prevState => prevState + 1)
-    })
+    socket.on('USER:UPDATE_STATUS', data => setNewStatusState(data))
+    socket.on('MESSAGE:NEW', data => setNewLastMessageState(data))
+    socket.on('MESSAGE:UPDATE_IS_READ', data => setNewMessageIsReadState(data))
   }, []) // eslint-disable-line
 
   // Socket Refresh Status 
-  const [refreshStatus, setRefreshStatus] = useState(0)
   const [newStatusState, setNewStatusState] = useState()
 
   useEffect(() => {
-    if (refreshStatus) {
+    if (!isFirstLoad) {
       const newDialogs = dialogs.map(dialog => {
         if (dialog.userTo._id.toString() === newStatusState.userId.toString()) {
           return {
@@ -64,14 +54,13 @@ const Sidebar = ({ dialogId }) => {
       })
       setDialogs(newDialogs)
     }
-  }, [refreshStatus]) // eslint-disable-line
+  }, [newStatusState]) // eslint-disable-line
 
   // Socket Last Message
-  const [refreshLastMessage, setRefreshLastMessage] = useState(0)
   const [newLastMessageState, setNewLastMessageState] = useState()
 
   useEffect(() => {
-    if (refreshLastMessage) {
+    if (!isFirstLoad) {
       const newDialogs = dialogs.map(dialog => {
         if (dialog._id.toString() === newLastMessageState.dialogId.toString()) {
           let newMessagesCount 
@@ -84,19 +73,16 @@ const Sidebar = ({ dialogId }) => {
       })
       setDialogs(newDialogs)
     }
-  }, [refreshLastMessage]) // eslint-disable-line
+  }, [newLastMessageState]) // eslint-disable-line
 
   // Socket Status isRead 
-  const [refreshMessageIsRead, setRefreshMessageIsRead] = useState(0)
   const [newMessageIsReadState, setNewMessageIsReadState] = useState()
 
   useEffect(() => {
     const updateIsReadState = () => {
-      const { dialogId, messagesIds } = newMessageIsReadState
-
       const newDialogs = dialogs.map(dialog => {
-        if (dialog._id.toString() === dialogId.toString()) {
-          if (messagesIds.some(messageId => messageId === dialog.lastMessage._id.toString())) {
+        if (dialog._id.toString() === newMessageIsReadState.dialogId.toString()) {
+          if (newMessageIsReadState.messagesIds.some(messageId => messageId === dialog.lastMessage._id.toString())) {
             return {
               ...dialog,
               newMessagesCount: 0,
@@ -112,8 +98,8 @@ const Sidebar = ({ dialogId }) => {
       setTimeout(() => { setDialogs(newDialogs) }, 1000)
     }
 
-    if (refreshMessageIsRead && Boolean(newMessageIsReadState.messagesIds.length)) updateIsReadState()
-  }, [refreshMessageIsRead]) // eslint-disable-line
+    if (!isFirstLoad && Boolean(newMessageIsReadState.messagesIds.length)) updateIsReadState()
+  }, [newMessageIsReadState]) // eslint-disable-line
 
   return (
     <div className="Sidebar">

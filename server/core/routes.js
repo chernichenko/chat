@@ -30,7 +30,7 @@ const createRoutes = (app, io) => {
    app.post('/api/auth/reset', UserController.reset)
    app.post('/api/auth/reset/finished', checkRegisterInputs, UserController.resetFinished)
 
-   app.get('/api/user', auth, lastSeen, UserController.getUser)
+    app.get('/api/user', auth, lastSeen, UserController.getUser)
    
    app.post('/api/profile', auth, lastSeen, ProfileController.changeUserInfo)
 
